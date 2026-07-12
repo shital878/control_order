@@ -44,12 +44,6 @@ label{
     color: black !important;
 }
             
-#             /* Make all labels bold */
-# label {
-#     font-weight: bold !important;
-#     font-size: 16px !important;
-#     color: black !important;
-# }
 
 /* Input Text */
 .stTextInput input{
@@ -94,6 +88,8 @@ div[role="radiogroup"] label{
     background-color:#1e7e34 !important;
     color:white !important;
 }
+            
+                                                                                                                  
 
 </style>
 """, unsafe_allow_html=True)
@@ -164,6 +160,7 @@ def set_background(image_name):
 
 
 def login():
+    
     set_background("grey.png")
 
     st.markdown(
@@ -187,7 +184,7 @@ def login():
     with st.container(border=True):
         username = st.text_input("👤 UserName",placeholder="Enter username")
         password = st.text_input(
-                "🔑 Password",
+            "🔑 Password",
                 type="password",
                 placeholder="Enter password"
             )
@@ -258,6 +255,7 @@ color:darkblue;">
 👤 Create and View User
 </h2>
 """, unsafe_allow_html=True)
+    
 
     set_background("sky1.png")
 
@@ -283,7 +281,7 @@ color:darkblue;">
         with st.container(border=True):
         
                 username = st.text_input(
-                    "UserName",placeholder="Enter username"
+                    "**UserName***",placeholder="Enter username"
                 )
 
 #                 username = st.text_input(
@@ -293,7 +291,7 @@ color:darkblue;">
 # )
 
                 password = st.text_input(
-                    "Password",
+                    "**Password***",
                     type="password",placeholder="Enter Password"
                 )
 
@@ -307,7 +305,24 @@ color:darkblue;">
                 if st.button(
                     "✅ Create User"
                 ):
-                    pass
+                    
+                     # ==========================
+                # Mandatory Validation
+                # ==========================
+
+                    if username.strip() == "":
+                        st.error("❌ Username is mandatory")
+                        st.stop()
+
+                    if password.strip() == "":
+                        st.error("❌ Password is mandatory")
+                        st.stop()
+
+                    if role == "Select Role":
+                        st.error("❌ Please select Role")
+                        st.stop()
+
+                    # pass
 
 
         # if st.button("Submit"):

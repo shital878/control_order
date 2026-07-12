@@ -1,5 +1,5 @@
 import streamlit as st
-
+from outlet_onboarding import outlet_onaboard
 from login import login, create_user
 
 
@@ -47,8 +47,8 @@ if st.sidebar.button("Logout"):
     st.rerun()
 
 menu_list = [
-    "Product Master",
     "Outlet Onboard",
+    "Product Master",
     "Order Master",
     "Records"
 ]
@@ -63,11 +63,12 @@ menu = st.sidebar.radio(
     menu_list
 )
 
-# if menu == "Product Master":
-#     masala_master()
 
-# elif menu == "Outlet Onboard":
-#     outlet_onaboard()
+if menu == "Outlet Onboard":
+    outlet_onaboard()
+
+# elif menu == "Product Master":
+#     masala_master()
 
 # elif menu == "Order Master":
 #     order_details()
