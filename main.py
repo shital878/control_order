@@ -1,6 +1,7 @@
 import streamlit as st
 from outlet_onboarding import outlet_onaboard
 from masala_master import masala_master
+from book_order import order_details
 from login import login, create_user
 
 
@@ -50,7 +51,7 @@ if st.sidebar.button("Logout"):
 menu_list = [
     "Outlet Onboard",
     "Product Master",
-    "Order Master",
+    "book_order",
     "Records"
 ]
 
@@ -71,8 +72,8 @@ if menu == "Outlet Onboard":
 elif menu == "Product Master":
     masala_master()
 
-# elif menu == "Order Master":
-#     order_details()
+elif menu == "book_order":
+    order_details()
 
 # elif menu == "Records":
 #     records()
