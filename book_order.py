@@ -448,42 +448,76 @@ background-color:#F8C471;
 
             for i, item in enumerate(st.session_state.cart):
 
-                c1,c2,c3,c4,c5 = st.columns([4,1,1,1,1])
-
-                # Product Name
-                with c1:
-                    st.write(item["masala_name"])
-
-                # Qty
-                with c2:
-
-                    new_qty = st.number_input(
-                        "",
-                        min_value=1,
-                        max_value=item["stock"],
-                        value=item["qty"],
-                        key=f"cart_qty_{i}"
-                    )
-
-                    item["qty"] = new_qty
-
-                # Rate
-                with c3:
-                    st.write(f"₹ {item['rate']}")
-
-                amount = new_qty * item["rate"]
+                amount = item["qty"] * item["rate"]
                 grand_total += amount
+            
+                with st.container(border=True):
+                
+                    # First Row
+                    st.markdown(f"### {item['masala_name']}")
+            
+                    # Second Row
+                    col1, col2, col3, col4 = st.columns([2,2,2,1])
+            
+                    with col1:
+                        new_qty = st.number_input(
+                            "Qty",
+                            min_value=1,
+                            max_value=item["stock"],
+                            value=item["qty"],
+                            key=f"cart_qty_{i}"
+                        )
+                        item["qty"] = new_qty
+            
+                    with col2:
+                        st.metric("Rate", f"₹ {item['rate']}")
+            
+                    with col3:
+                        st.metric("Amount", f"₹ {new_qty * item['rate']}")
+            
+                    with col4:
+                        if st.button("🗑", key=f"delete_{i}"):
+                            remove_index = i
 
-                # Amount
-                with c4:
-                    st.write(f"₹ {amount}")
 
-                # Delete
-                with c5:
+            # for i, item in enumerate(st.session_state.cart):
 
-                    if st.button("🗑", key=f"delete_{i}"):
+            #     c1,c2,c3,c4,c5 = st.columns([4,1,1,1,1])
 
-                        remove_index = i
+            #     # Product Name
+            #     with c1:
+            #         st.write(item["masala_name"])
+
+            #     # Qty
+            #     with c2:
+
+            #         new_qty = st.number_input(
+            #             "",
+            #             min_value=1,
+            #             max_value=item["stock"],
+            #             value=item["qty"],
+            #             key=f"cart_qty_{i}"
+            #         )
+
+            #         item["qty"] = new_qty
+
+            #     # Rate
+            #     with c3:
+            #         st.write(f"₹ {item['rate']}")
+
+            #     amount = new_qty * item["rate"]
+            #     grand_total += amount
+
+            #     # Amount
+            #     with c4:
+            #         st.write(f"₹ {amount}")
+
+            #     # Delete
+            #     with c5:
+
+            #         if st.button("🗑", key=f"delete_{i}"):
+
+            #             remove_index = i
 
                 st.divider()
 
