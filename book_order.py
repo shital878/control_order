@@ -436,48 +436,170 @@ background-color:#F8C471;
 
             grand_total = 0
 
-            h1,h2,h3,h4,h5 = st.columns([4,1,1,1,1])
+            st.markdown("""
+<style>
 
-            h1.markdown("**Product**")
-            h2.markdown("**Qty**")
-            h3.markdown("**Rate**")
-            h4.markdown("**Amount**")
-            h5.markdown("**Delete**")
+.cart-header{
+    font-weight:bold;
+    font-size:18px;
+    padding-bottom:8px;
+}
 
-            remove_index = None
+.cart-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid #ddd;
+    padding:10px 0;
+}
 
-            for i, item in enumerate(st.session_state.cart):
+.product{
+    flex:3;
+    word-wrap:break-word;
+    white-space:normal;
+    font-size:15px;
+    font-weight:500;
+}
 
-                amount = item["qty"] * item["rate"]
-                grand_total += amount
+.qty{
+    flex:1;
+}
+
+.rate{
+    flex:1;
+    text-align:center;
+}
+
+.amount{
+    flex:1;
+    text-align:center;
+}
+
+.delete{
+    flex:1;
+    text-align:center;
+}
+
+@media (max-width:768px){
+
+.product{
+    flex:2;
+    font-size:13px;
+}
+
+.rate{
+    font-size:12px;
+}
+
+.amount{
+    font-size:12px;
+}
+
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# Header
+        h1,h2,h3,h4,h5 = st.columns([3,1,1,1,1])
+        
+        h1.markdown("**Product**")
+        h2.markdown("**Qty**")
+        h3.markdown("**Rate**")
+        h4.markdown("**Amount**")
+        h5.markdown("**Delete**")
+        
+        remove_index=None
+        
+        for i,item in enumerate(st.session_state.cart):
+        
+            amount=item["qty"]*item["rate"]
+            grand_total+=amount
+        
+            c1,c2,c3,c4,c5=st.columns([3,1,1,1,1])
+        
+            with c1:
             
-                with st.container(border=True):
+                st.markdown(
+                    f"""
+                    <div style="
+                    white-space:normal;
+                    word-break:break-word;
+                    line-height:18px;
+                    font-size:15px;
+                    ">
+                    {item['masala_name']}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+        
+            with c2:
+            
+                item["qty"]=st.number_input(
+                    "",
+                    min_value=1,
+                    max_value=item["stock"],
+                    value=item["qty"],
+                    key=f"qty_{i}"
+                )
+        
+            with c3:
+                st.write(f"₹{item['rate']}")
+        
+            with c4:
+                st.write(f"₹{item['qty']*item['rate']}")
+        
+            with c5:
+            
+                if st.button("🗑",key=f"del_{i}"):
                 
-                    # First Row
-                    st.markdown(f"### {item['masala_name']}")
-            
-                    # Second Row
-                    col1, col2, col3, col4 = st.columns([2,2,2,1])
-            
-                    with col1:
-                        new_qty = st.number_input(
-                            "Qty",
-                            min_value=1,
-                            max_value=item["stock"],
-                            value=item["qty"],
-                            key=f"cart_qty_{i}"
-                        )
-                        item["qty"] = new_qty
-            
-                    with col2:
-                        st.metric("Rate", f"₹ {item['rate']}")
-            
-                    with col3:
-                        st.metric("Amount", f"₹ {new_qty * item['rate']}")
-            
-                    with col4:
-                        if st.button("🗑", key=f"delete_{i}"):
-                            remove_index = i
+                    remove_index=i
+        
+            st.divider()
+
+            # h1,h2,h3,h4,h5 = st.columns([4,1,1,1,1])
+
+            # h1.markdown("**Product**")
+            # h2.markdown("**Qty**")
+            # h3.markdown("**Rate**")
+            # h4.markdown("**Amount**")
+            # h5.markdown("**Delete**")
+
+            # remove_index = None
+
+            # for i, item in enumerate(st.session_state.cart):
+
+            #     amount = item["qty"] * item["rate"]
+            #     grand_total += amount
+
+            #     with st.container(border=True):
+                
+            #         # First Row
+            #         st.markdown(f"### {item['masala_name']}")
+
+            #         # Second Row
+            #         col1, col2, col3, col4 = st.columns([2,2,2,1])
+
+            #         with col1:
+            #             new_qty = st.number_input(
+            #                 "Qty",
+            #                 min_value=1,
+            #                 max_value=item["stock"],
+            #                 value=item["qty"],
+            #                 key=f"cart_qty_{i}"
+            #             )
+            #             item["qty"] = new_qty
+
+            #         with col2:
+            #             st.metric("Rate", f"₹ {item['rate']}")
+
+            #         with col3:
+            #             st.metric("Amount", f"₹ {new_qty * item['rate']}")
+
+            #         with col4:
+            #             if st.button("🗑", key=f"delete_{i}"):
+            #                 remove_index = i
 
 
             # for i, item in enumerate(st.session_state.cart):
@@ -519,7 +641,7 @@ background-color:#F8C471;
 
             #             remove_index = i
 
-                st.divider()
+                # st.divider()
 
             if remove_index is not None:
 
