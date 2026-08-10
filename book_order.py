@@ -173,7 +173,7 @@ def order_details():
         color: white;
         border-radius: 8px;
         height: 42px;
-        width: 200px;
+        width: 100px;
         font-weight: bold;
         border: none;
     }
@@ -274,7 +274,7 @@ def order_details():
            ====================================== */
 
         .stButton > button {
-            width: 100% !important;
+            width: 50% !important;
             min-width: 0 !important;
             font-size: 12px !important;
             padding: 5px !important;
@@ -482,7 +482,7 @@ def order_details():
 
                 for _, row in df.iterrows():
                 
-                    c1,c2,c3 = st.columns([1,3,1])
+                    c1,c2,c3 = st.columns([0.7,0.6,0.4])
 
                     with c1:
                     
@@ -1057,33 +1057,33 @@ def order_details():
 
 
     elif menu == "Cart":
-    
+
         st.title("🛒 Shopping Cart")
-    
+
         if len(st.session_state.cart) == 0:
-        
+
             st.info("Cart is Empty.")
-    
+
         else:
-        
+
             customer = st.session_state.get(
                 "customer_name",
                 ""
             )
-    
+
             st.info(f"Customer : {customer}")
-    
+
             grand_total = 0
             remove_index = None
-    
+
             # ==========================================
             # CART ITEMS
             # ==========================================
-    
+
             for i, item in enumerate(st.session_state.cart):
-            
+
                 with st.container(border=True):
-                
+
                     # Product name
                     st.markdown(
                         f"""
@@ -1099,13 +1099,13 @@ def order_details():
                         """,
                         unsafe_allow_html=True
                     )
-    
+
                     # Qty / Rate / Amount
                     c1, c2, c3 = st.columns([1, 1, 1])
-    
+
                     # Quantity
                     with c1:
-                    
+
                         new_qty = st.number_input(
                             "Qty",
                             min_value=0,
@@ -1114,133 +1114,133 @@ def order_details():
                             step=1,
                             key=f"cart_qty_{i}"
                         )
-    
+
                     # Rate
                     with c2:
-                    
+
                         st.markdown("**Rate**")
-    
+
                         st.write(
                             f"₹ {item['rate']:.2f}"
                         )
-    
+
                     # Amount
                     with c3:
-                    
+
                         current_amount = (
                             new_qty * item["rate"]
                         )
-    
+
                         st.markdown("**Amount**")
-    
+
                         st.write(
                             f"₹ {current_amount:.2f}"
                         )
-    
+
                     # Update quantity
                     if new_qty == 0:
-                    
+
                         remove_index = i
-    
+
                     else:
-                    
+
                         item["qty"] = new_qty
-    
+
                         grand_total += (
                             new_qty * item["rate"]
                         )
-    
+
             # ==========================================
             # REMOVE ITEM IF QTY = 0
             # ==========================================
-    
+
             if remove_index is not None:
-            
+
                 st.session_state.cart.pop(
                     remove_index
                 )
-    
+
                 st.rerun()
-    
+
             # ==========================================
             # GRAND TOTAL
             # ==========================================
-    
+
             st.success(
                 f"Grand Total : ₹ {grand_total:.2f}"
             )
-    
+
             st.markdown("###")
-    
+
             # ==========================================
             # BUTTONS
             # ==========================================
-    
+
             col1, col2, col3 = st.columns(3)
-    
+
             # Continue Shopping
             with col1:
-            
+
                 if st.button(
                     "⬅ Continue Shopping",
                     use_container_width=True
                 ):
-    
+
                     st.session_state.selected_category = None
-    
+
                     st.rerun()
-    
+
             # Clear Cart
             with col2:
-            
+
                 if st.button(
                     "🗑 Clear Cart",
                     use_container_width=True
                 ):
-    
+
                     st.session_state.cart = []
-    
+
                     st.rerun()
-    
+
             # Submit Order
             with col3:
-            
+
                 if st.button(
                     "✅ Submit Order",
                     use_container_width=True
                 ):
-    
+
                     customer_name = st.session_state.get(
                         "customer_name",
                         ""
                     )
-    
+
                     if not customer_name:
-                    
+
                         st.warning(
                             "Please select customer first."
                         )
-    
+
                     elif len(
                         st.session_state.cart
                     ) == 0:
-    
+
                         st.warning(
                             "Cart is Empty."
                         )
-    
+
                     else:
-                    
+
                         cursor = connection.cursor()
-    
+
                         error = False
-    
+
                         # ==================================
                         # CHECK STOCK
                         # ==================================
-    
+
                         for item in st.session_state.cart:
-                        
+
                             cursor.execute(
                                 """
                                 SELECT inventory_qty
@@ -1249,47 +1249,47 @@ def order_details():
                                 """,
                                 (item["id"],)
                             )
-    
+
                             result = cursor.fetchone()
-    
+
                             if result is None:
-                            
+
                                 st.error(
                                     f"{item['masala_name']} "
                                     f"not found."
                                 )
-    
+
                                 error = True
                                 continue
-                            
+
                             stock = result[0]
-    
+
                             item["stock"] = stock
-    
+
                             if item["qty"] > stock:
-                            
+
                                 st.error(
                                     f"{item['masala_name']} "
                                     f"has only {stock} Qty available."
                                 )
-    
+
                                 error = True
-    
+
                         # ==================================
                         # SAVE ORDER
                         # ==================================
-    
+
                         if not error:
-                        
+
                             try:
-                            
+
                                 for item in st.session_state.cart:
-                                
+
                                     amount = (
                                         item["qty"]
                                         * item["rate"]
                                     )
-    
+
                                     # Duplicate check
                                     cursor.execute(
                                         """
@@ -1304,18 +1304,18 @@ def order_details():
                                             item["masala_name"]
                                         )
                                     )
-    
+
                                     count = cursor.fetchone()[0]
-    
+
                                     if count > 0:
-                                    
+
                                         st.warning(
                                             f"{item['masala_name']} "
                                             f"already ordered today."
                                         )
-    
+
                                         continue
-                                    
+
                                     # Insert order
                                     cursor.execute(
                                         """
@@ -1351,7 +1351,7 @@ def order_details():
                                             amount
                                         )
                                     )
-    
+
                                     # Reduce inventory
                                     cursor.execute(
                                         """
@@ -1365,29 +1365,29 @@ def order_details():
                                             item["id"]
                                         )
                                     )
-    
+
                                 connection.commit()
-    
+
                                 st.success(
                                     "✅ Order Submitted Successfully"
                                 )
-    
+
                                 st.session_state.cart = []
-    
+
                                 st.session_state.selected_category = None
-    
+
                                 cursor.close()
-    
+
                                 st.rerun()
-    
+
                             except Exception as e:
-                            
+
                                 connection.rollback()
-    
+
                                 st.error(
                                     f"Order submission failed: {e}"
                                 )
-    
+
                                 cursor.close()
 
 
