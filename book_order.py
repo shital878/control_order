@@ -15,84 +15,286 @@ def order_details():
     st.set_page_config(page_title="Outlet Management System", layout="wide")
 
     # ---------------- CUSTOM CSS ----------------
+#     st.markdown("""
+# <style>
+
+# /* Main Background */
+
+# [data-testid="stAppViewContainer"]{
+# background: linear-gradient(to right,#d6eaf8,#f9ebea);
+# }
+
+# /* Center Title */
+
+# .main-title{
+# font-size:40px;
+# font-weight:bold;
+# text-align:center;
+# color:#154360;
+# margin-bottom:25px;
+# }
+
+# /* Card Design */
+
+# .card{
+# background:white;
+# padding:30px;
+# border-radius:12px;
+# box-shadow:0px 4px 12px rgba(0,0,0,0.15);
+# margin-bottom:20px;
+# }
+
+# /* Text Input */
+
+# div[data-baseweb="input"] > div{
+# background-color:#fdfefe;
+# border:2px solid #2E86C1;
+# border-radius:8px;
+# }
+
+# div[data-baseweb="input"] > div:focus-within{
+# border:2px solid #1B4F72;
+# background-color:#EBF5FB;
+# }
+
+# /* Labels */
+
+# label{
+# color:#154360 !important;
+# font-weight:600;
+# }
+
+#  /* Buttons */
+
+# .stButton > button,
+# div[data-testid="stFormSubmitButton"] > button{
+# background:#28B463;
+# color:white;
+# border-radius:8px;
+# height:42px;
+# width:200px;
+# font-weight:bold;
+# border:none;
+# }
+
+# /* Hover */
+
+# .stButton > button:hover,
+# div[data-testid="stFormSubmitButton"] > button:hover{
+# background:#1D8348;
+# color:white;
+# }
+
+# /* Sidebar */
+
+# section[data-testid="stSidebar"]{
+# background-color:#F8C471;
+# }
+
+# </style>
+# """, unsafe_allow_html=True)
+
+
     st.markdown("""
-<style>
+    <style>
+    
+    /* ==========================================
+       MAIN BACKGROUND
+       ========================================== */
+    
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(
+            to right,
+            #d6eaf8,
+            #f9ebea
+        );
+    }
+    
+    
+    /* ==========================================
+       CENTER TITLE
+       ========================================== */
+    
+    .main-title {
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        color: #154360;
+        margin-bottom: 25px;
+    }
+    
+    
+    /* ==========================================
+       CARD DESIGN
+       ========================================== */
+    
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+        margin-bottom: 20px;
+    }
+    
+    
+    /* ==========================================
+       TEXT INPUT
+       ========================================== */
+    
+    div[data-baseweb="input"] > div {
+        background-color: #fdfefe;
+        border: 2px solid #2E86C1;
+        border-radius: 8px;
+    }
+    
+    div[data-baseweb="input"] > div:focus-within {
+        border: 2px solid #1B4F72;
+        background-color: #EBF5FB;
+    }
+    
+    
+    /* ==========================================
+       LABELS
+       ========================================== */
+    
+    label {
+        color: #154360 !important;
+        font-weight: 600;
+    }
+    
+    
+    /* ==========================================
+       BUTTONS
+       ========================================== */
+    
+    .stButton > button,
+    div[data-testid="stFormSubmitButton"] > button {
+        background: #28B463;
+        color: white;
+        border-radius: 8px;
+        height: 42px;
+        width: 200px;
+        font-weight: bold;
+        border: none;
+    }
+    
+    
+    /* ==========================================
+       BUTTON HOVER
+       ========================================== */
+    
+    .stButton > button:hover,
+    div[data-testid="stFormSubmitButton"] > button:hover {
+        background: #1D8348;
+        color: white;
+    }
+    
+    
+    /* ==========================================
+       SIDEBAR
+       ========================================== */
+    
+    section[data-testid="stSidebar"] {
+        background-color: #F8C471;
+    }
+    
+    
+    /* ==========================================
+       MOBILE RESPONSIVE DESIGN
+       ========================================== */
+    
+    @media (max-width: 768px) {
+    
+        /* Page spacing */
+        .block-container {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            padding-top: 15px !important;
+        }
+    
+        /* Main title */
+        .main-title {
+            font-size: 28px !important;
+            margin-bottom: 15px !important;
+        }
+    
+        /* Headings */
+        h1 {
+            font-size: 28px !important;
+        }
+    
+        h2 {
+            font-size: 23px !important;
+        }
+    
+        h3 {
+            font-size: 20px !important;
+        }
+    
+        /* ======================================
+           KEEP CART COLUMNS HORIZONTAL
+           ====================================== */
+    
+        div[data-testid="stHorizontalBlock"] {
+            flex-wrap: nowrap !important;
+            gap: 8px !important;
+            align-items: center !important;
+        }
+    
+        div[data-testid="column"] {
+            min-width: 0 !important;
+            padding: 0 !important;
+        }
+    
+        /* ======================================
+           NUMBER INPUT
+           ====================================== */
+    
+        div[data-testid="stNumberInput"] {
+            width: 100% !important;
+        }
+    
+        div[data-testid="stNumberInput"] input {
+            font-size: 14px !important;
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+    
+        /* ======================================
+           CART TEXT
+           ====================================== */
+    
+        div[data-testid="column"] p {
+            font-size: 13px !important;
+            word-break: break-word !important;
+        }
+    
+        /* ======================================
+           BUTTONS
+           ====================================== */
+    
+        .stButton > button {
+            width: 100% !important;
+            min-width: 0 !important;
+            font-size: 12px !important;
+            padding: 5px !important;
+            white-space: nowrap !important;
+        }
+    
+        /* ======================================
+           CUSTOMER MESSAGE
+           ====================================== */
+    
+        div[data-testid="stAlert"] {
+            font-size: 14px !important;
+        }
+    
+    }
+    
+    </style>
+    """, unsafe_allow_html=True)
+    
 
-/* Main Background */
-
-[data-testid="stAppViewContainer"]{
-background: linear-gradient(to right,#d6eaf8,#f9ebea);
-}
-
-/* Center Title */
-
-.main-title{
-font-size:40px;
-font-weight:bold;
-text-align:center;
-color:#154360;
-margin-bottom:25px;
-}
-
-/* Card Design */
-
-.card{
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0px 4px 12px rgba(0,0,0,0.15);
-margin-bottom:20px;
-}
-
-/* Text Input */
-
-div[data-baseweb="input"] > div{
-background-color:#fdfefe;
-border:2px solid #2E86C1;
-border-radius:8px;
-}
-
-div[data-baseweb="input"] > div:focus-within{
-border:2px solid #1B4F72;
-background-color:#EBF5FB;
-}
-
-/* Labels */
-
-label{
-color:#154360 !important;
-font-weight:600;
-}
-
- /* Buttons */
-
-.stButton > button,
-div[data-testid="stFormSubmitButton"] > button{
-background:#28B463;
-color:white;
-border-radius:8px;
-height:42px;
-width:200px;
-font-weight:bold;
-border:none;
-}
-
-/* Hover */
-
-.stButton > button:hover,
-div[data-testid="stFormSubmitButton"] > button:hover{
-background:#1D8348;
-color:white;
-}
-
-/* Sidebar */
-
-section[data-testid="stSidebar"]{
-background-color:#F8C471;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
     # ---------------- TITLE ----------------
     st.markdown('<div class="main-title">Outlet Management System</div>', unsafe_allow_html=True)
@@ -422,57 +624,57 @@ background-color:#F8C471;
     elif menu == "Cart":
 
         st.title("🛒 Shopping Cart")
-    
+
         # ==========================================
         # CHECK CART
         # ==========================================
-    
+
         if len(st.session_state.cart) == 0:
-        
+
             st.info("Cart is Empty.")
-    
+
         else:
-        
+
             # ==========================================
             # CUSTOMER
             # ==========================================
-    
+
             customer = st.session_state.get(
                 "customer_name",
                 ""
             )
-    
+
             st.info(
                 f"Customer : {customer}"
             )
-    
+
             # ==========================================
             # GRAND TOTAL
             # ==========================================
-    
+
             grand_total = 0
-    
+
             # Store index of item to remove
             remove_index = None
-    
+
             # ==========================================
             # CART ITEMS
             # ==========================================
-    
+
             for i, item in enumerate(
                 st.session_state.cart
             ):
-    
+
                 # ======================================
                 # PRODUCT CARD
                 # ======================================
-    
+
                 with st.container(border=True):
-                
+
                     # ----------------------------------
                     # PRODUCT NAME
                     # ----------------------------------
-    
+
                     st.markdown(
                         f"""
                         <div style="
@@ -487,21 +689,21 @@ background-color:#F8C471;
                         """,
                         unsafe_allow_html=True
                     )
-    
+
                     # ==================================
                     # QTY / RATE / AMOUNT
                     # ==================================
-    
+
                     c1, c2, c3 = st.columns(
                         [1, 1, 1]
                     )
-    
+
                     # ----------------------------------
                     # QUANTITY
                     # ----------------------------------
-    
+
                     with c1:
-                    
+
                         new_qty = st.number_input(
                             "Qty",
                             min_value=0,
@@ -514,163 +716,163 @@ background-color:#F8C471;
                             step=1,
                             key=f"cart_qty_{i}"
                         )
-    
+
                     # ----------------------------------
                     # RATE
                     # ----------------------------------
-    
+
                     with c2:
-                    
+
                         st.markdown(
                             "**Rate**"
                         )
-    
+
                         st.write(
                             f"₹ {item['rate']}"
                         )
-    
+
                     # ----------------------------------
                     # AMOUNT
                     # ----------------------------------
-    
+
                     with c3:
-                    
+
                         st.markdown(
                             "**Amount**"
                         )
-    
+
                         current_amount = (
                             new_qty *
                             item["rate"]
                         )
-    
+
                         st.write(
                             f"₹ {current_amount}"
                         )
-    
+
                     # ==================================
                     # UPDATE CART QUANTITY
                     # ==================================
-    
+
                     if new_qty == 0:
-                    
+
                         remove_index = i
-    
+
                     else:
-                    
+
                         item["qty"] = new_qty
-    
+
                         grand_total += (
                             new_qty *
                             item["rate"]
                         )
-    
+
             # ==========================================
             # REMOVE ITEM IF QTY = 0
             # ==========================================
-    
+
             if remove_index is not None:
-            
+
                 st.session_state.cart.pop(
                     remove_index
                 )
-    
+
                 st.rerun()
-    
+
             # ==========================================
             # GRAND TOTAL
             # ==========================================
-    
+
             st.divider()
-    
+
             st.success(
                 f"Grand Total : ₹ {grand_total}"
             )
-    
+
             st.markdown("###")
-    
+
             # ==========================================
             # CART ACTION BUTTONS
             # ==========================================
-    
+
             col1, col2, col3 = st.columns(3)
-    
+
             # ==========================================
             # CONTINUE SHOPPING
             # ==========================================
-    
+
             with col1:
-            
+
                 if st.button(
                     "⬅ Continue Shopping",
                     use_container_width=True
                 ):
-    
+
                     st.session_state.selected_category = None
-    
+
                     st.rerun()
-    
+
             # ==========================================
             # CLEAR CART
             # ==========================================
-    
+
             with col2:
-            
+
                 if st.button(
                     "🗑 Clear Cart",
                     use_container_width=True
                 ):
-    
+
                     st.session_state.cart = []
-    
+
                     st.rerun()
-    
+
             # ==========================================
             # SUBMIT ORDER
             # ==========================================
-    
+
             with col3:
-            
+
                 if st.button(
                     "✅ Submit Order",
                     use_container_width=True
                 ):
-    
+
                     # ==================================
                     # CUSTOMER CHECK
                     # ==================================
-    
+
                     customer_name = st.session_state.get(
                         "customer_name",
                         ""
                     )
-    
+
                     if not customer_name:
-                    
+
                         st.warning(
                             "Please select customer first."
                         )
-    
+
                     elif len(
                         st.session_state.cart
                     ) == 0:
-    
+
                         st.warning(
                             "Cart is Empty."
                         )
-    
+
                     else:
-                    
+
                         cursor = connection.cursor()
-    
+
                         error = False
-    
+
                         # ==================================
                         # CHECK STOCK FIRST
                         # ==================================
-    
+
                         for item in st.session_state.cart:
-                        
+
                             cursor.execute(
                                 """
                                 SELECT inventory_qty
@@ -681,56 +883,56 @@ background-color:#F8C471;
                                     item["id"],
                                 )
                             )
-    
+
                             result = cursor.fetchone()
-    
+
                             # Product does not exist
                             if result is None:
-                            
+
                                 st.error(
                                     f"{item['masala_name']} "
                                     f"not found in Product Master."
                                 )
-    
+
                                 error = True
-    
+
                                 continue
-                            
+
                             stock = result[0]
-    
+
                             # Store latest stock
                             item["stock"] = stock
-    
+
                             # Check quantity
                             if item["qty"] > stock:
-                            
+
                                 st.error(
                                     f"{item['masala_name']} "
                                     f"has only {stock} Qty available."
                                 )
-    
+
                                 error = True
-    
+
                         # ==================================
                         # SAVE ORDER
                         # ==================================
-    
+
                         if not error:
-                        
+
                             try:
-                            
+
                                 for item in st.session_state.cart:
-                                
+
                                     amount = (
                                         item["qty"]
                                         *
                                         item["rate"]
                                     )
-    
+
                                     # ==================================
                                     # DUPLICATE ORDER CHECK
                                     # ==================================
-    
+
                                     cursor.execute(
                                         """
                                         SELECT COUNT(*)
@@ -744,22 +946,22 @@ background-color:#F8C471;
                                             item["masala_name"]
                                         )
                                     )
-    
+
                                     count = cursor.fetchone()[0]
-    
+
                                     if count > 0:
-                                    
+
                                         st.warning(
                                             f"{item['masala_name']} "
                                             f"already ordered today."
                                         )
-    
+
                                         continue
-                                    
+
                                     # ==================================
                                     # INSERT ORDER
                                     # ==================================
-    
+
                                     cursor.execute(
                                         """
                                         INSERT INTO masala_order
@@ -794,11 +996,11 @@ background-color:#F8C471;
                                             amount
                                         )
                                     )
-    
+
                                     # ==================================
                                     # REDUCE INVENTORY
                                     # ==================================
-    
+
                                     cursor.execute(
                                         """
                                         UPDATE masala_master
@@ -811,46 +1013,46 @@ background-color:#F8C471;
                                             item["id"]
                                         )
                                     )
-    
+
                                 # ==================================
                                 # COMMIT
                                 # ==================================
-    
+
                                 connection.commit()
-    
+
                                 st.success(
                                     "✅ Order Submitted Successfully"
                                 )
-    
+
                                 # ==================================
                                 # CLEAR CART
                                 # ==================================
-    
+
                                 st.session_state.cart = []
-    
+
                                 # ==================================
                                 # RETURN TO CATEGORY
                                 # ==================================
-    
+
                                 st.session_state.selected_category = None
-    
+
                                 cursor.close()
-    
+
                                 st.rerun()
-    
+
                             except Exception as e:
-                            
+
                                 # ==================================
                                 # ROLLBACK IF ERROR
                                 # ==================================
-    
+
                                 connection.rollback()
-    
+
                                 st.error(
                                     f"Order submission failed: {e}"
                                 )
-    
+
                                 cursor.close()
-    
+
 
 # order_details()
