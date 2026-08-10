@@ -420,12 +420,8 @@ background-color:#F8C471;
 # ==========================================
 
     elif menu == "Cart":
-
-        st.title("🛒 Shopping Cart")
     
-        # ==========================================
-        # CHECK CART
-        # ==========================================
+        st.title("🛒 Shopping Cart")
     
         if len(st.session_state.cart) == 0:
         
@@ -433,10 +429,6 @@ background-color:#F8C471;
     
         else:
         
-            # ==========================================
-            # CUSTOMER
-            # ==========================================
-    
             customer = st.session_state.get(
                 "customer_name",
                 ""
@@ -446,13 +438,9 @@ background-color:#F8C471;
                 f"Customer : {customer}"
             )
     
-            # ==========================================
-            # GRAND TOTAL
-            # ==========================================
-    
             grand_total = 0
     
-            # Store index of item to remove
+            # Store item to remove
             remove_index = None
     
             # ==========================================
@@ -463,9 +451,9 @@ background-color:#F8C471;
                 st.session_state.cart
             ):
     
-                # ======================================
+                # --------------------------------------
                 # PRODUCT CARD
-                # ======================================
+                # --------------------------------------
     
                 with st.container(border=True):
                 
@@ -488,17 +476,17 @@ background-color:#F8C471;
                         unsafe_allow_html=True
                     )
     
-                    # ==================================
+                    # ----------------------------------
                     # QTY / RATE / AMOUNT
-                    # ==================================
+                    # ----------------------------------
     
                     c1, c2, c3 = st.columns(
                         [1, 1, 1]
                     )
     
-                    # ----------------------------------
+                    # ==================================
                     # QUANTITY
-                    # ----------------------------------
+                    # ==================================
     
                     with c1:
                     
@@ -515,9 +503,9 @@ background-color:#F8C471;
                             key=f"cart_qty_{i}"
                         )
     
-                    # ----------------------------------
+                    # ==================================
                     # RATE
-                    # ----------------------------------
+                    # ==================================
     
                     with c2:
                     
@@ -529,9 +517,9 @@ background-color:#F8C471;
                             f"₹ {item['rate']}"
                         )
     
-                    # ----------------------------------
+                    # ==================================
                     # AMOUNT
-                    # ----------------------------------
+                    # ==================================
     
                     with c3:
                     
@@ -548,9 +536,9 @@ background-color:#F8C471;
                             f"₹ {current_amount}"
                         )
     
-                    # ==================================
-                    # UPDATE CART QUANTITY
-                    # ==================================
+                    # ----------------------------------
+                    # UPDATE QUANTITY IN CART
+                    # ----------------------------------
     
                     if new_qty == 0:
                     
@@ -560,6 +548,12 @@ background-color:#F8C471;
                     
                         item["qty"] = new_qty
     
+                    # ----------------------------------
+                    # ADD TO GRAND TOTAL
+                    # ----------------------------------
+    
+                    if new_qty > 0:
+                    
                         grand_total += (
                             new_qty *
                             item["rate"]
@@ -583,274 +577,394 @@ background-color:#F8C471;
     
             st.divider()
     
-            st.success(
-                f"Grand Total : ₹ {grand_total}"
+            st.markdown(
+                f"""
+                <div style="
+                    text-align:right;
+                    font-size:22px;
+                    font-weight:bold;
+                    padding:10px;
+                ">
+                    Grand Total : ₹ {grand_total}
+                </div>
+                """,
+                unsafe_allow_html=True
             )
-    
-            st.markdown("###")
-    
-            # ==========================================
-            # CART ACTION BUTTONS
-            # ==========================================
-    
-            col1, col2, col3 = st.columns(3)
-    
-            # ==========================================
-            # CONTINUE SHOPPING
-            # ==========================================
-    
-            with col1:
-            
-                if st.button(
-                    "⬅ Continue Shopping",
-                    use_container_width=True
-                ):
-    
-                    st.session_state.selected_category = None
-    
-                    st.rerun()
-    
-            # ==========================================
-            # CLEAR CART
-            # ==========================================
-    
-            with col2:
-            
-                if st.button(
-                    "🗑 Clear Cart",
-                    use_container_width=True
-                ):
-    
-                    st.session_state.cart = []
-    
-                    st.rerun()
     
             # ==========================================
             # SUBMIT ORDER
             # ==========================================
     
-            with col3:
+            if st.button(
+                "✅ Submit Order",
+                use_container_width=True
+            ):
+    
+                st.success(
+                    "Order Submitted Successfully"
+                )
+    
+    
+#     elif menu == "Cart":
+
+#         st.title("🛒 Shopping Cart")
+
+#         if len(st.session_state.cart) == 0:
+
+#             st.info("Cart is Empty.")
+
+#         else:
+
+#             # st.success(f"Customer : {st.session_state.customer_name}")
+
+#             customer = st.session_state.get("customer_name", "")
+
+#             st.info(f"Customer : {customer}")
+
+#             grand_total = 0
+
+#             st.markdown("""
+# <style>
+
+# .cart-header{
+#     font-weight:bold;
+#     font-size:18px;
+#     padding-bottom:8px;
+# }
+
+# .cart-row{
+#     display:flex;
+#     align-items:center;
+#     gap:10px;
+#     border-bottom:1px solid #ddd;
+#     padding:10px 0;
+# }
+
+# .product{
+#     flex:3;
+#     word-wrap:break-word;
+#     white-space:normal;
+#     font-size:15px;
+#     font-weight:500;
+# }
+
+# .qty{
+#     flex:1;
+# }
+
+# .rate{
+#     flex:1;
+#     text-align:center;
+# }
+
+# .amount{
+#     flex:1;
+#     text-align:center;
+# }
+
+# .delete{
+#     flex:1;
+#     text-align:center;
+# }
+
+# @media (max-width:768px){
+
+# .product{
+#     flex:2;
+#     font-size:13px;
+# }
+
+# .rate{
+#     font-size:12px;
+# }
+
+# .amount{
+#     font-size:12px;
+# }
+
+# }
+
+# </style>
+# """, unsafe_allow_html=True)
+
+# # Header
+#         # h1,h2,h3,h4,h5 = st.columns([3,1,1,1,1])
+#         # h1,h2,h3,h4,h5 = st.columns([2,1,1,1,0.7])
+#         h1,h2,h3,h4,h5 = st.columns([1,.5,.5,.5,0.3])
+
+
+#         h1.markdown("**Product**")
+#         h2.markdown("**Qty**")
+#         h3.markdown("**Rate**")
+#         h4.markdown("**Amount**")
+#         h5.markdown("**Delete**")
+
+#         remove_index=None
+
+#         for i,item in enumerate(st.session_state.cart):
+        
+#             amount=item["qty"]*item["rate"]
+#             grand_total+=amount
+
+#             # c1,c2,c3,c4,c5=st.columns([3,1,1,1,1])
+#             c1,c2,c3,c4,c5 = st.columns([1,.5,.5,.5,0.3])
+
+#             with c1:
             
-                if st.button(
-                    "✅ Submit Order",
-                    use_container_width=True
-                ):
-    
-                    # ==================================
-                    # CUSTOMER CHECK
-                    # ==================================
-    
-                    customer_name = st.session_state.get(
-                        "customer_name",
-                        ""
-                    )
-    
-                    if not customer_name:
-                    
-                        st.warning(
-                            "Please select customer first."
-                        )
-    
-                    elif len(
-                        st.session_state.cart
-                    ) == 0:
-    
-                        st.warning(
-                            "Cart is Empty."
-                        )
-    
+#                 st.markdown(
+#                     f"""
+#                     <div style="
+#                     white-space:normal;
+#                     word-break:break-word;
+#                     line-height:18px;
+#                     font-size:15px;
+#                     ">
+#                     {item['masala_name']}
+#                     </div>
+#                     """,
+#                     unsafe_allow_html=True
+#                 )
+
+#             with c2:
+            
+#                 item["qty"]=st.number_input(
+#                     "",
+#                     min_value=1,
+#                     max_value=item["stock"],
+#                     value=item["qty"],
+#                     key=f"qty_{i}"
+#                 )
+
+#             with c3:
+#                 st.write(f"₹{item['rate']}")
+
+#             with c4:
+#                 st.write(f"₹{item['qty']*item['rate']}")
+
+#             with c5:
+            
+#                 if st.button("🗑",key=f"del_{i}"):
+                
+#                     remove_index=i
+
+#             st.divider()
+
+            # h1,h2,h3,h4,h5 = st.columns([4,1,1,1,1])
+
+            # h1.markdown("**Product**")
+            # h2.markdown("**Qty**")
+            # h3.markdown("**Rate**")
+            # h4.markdown("**Amount**")
+            # h5.markdown("**Delete**")
+
+            # remove_index = None
+
+            # for i, item in enumerate(st.session_state.cart):
+
+            #     amount = item["qty"] * item["rate"]
+            #     grand_total += amount
+
+            #     with st.container(border=True):
+                
+            #         # First Row
+            #         st.markdown(f"### {item['masala_name']}")
+
+            #         # Second Row
+            #         col1, col2, col3, col4 = st.columns([2,2,2,1])
+
+            #         with col1:
+            #             new_qty = st.number_input(
+            #                 "Qty",
+            #                 min_value=1,
+            #                 max_value=item["stock"],
+            #                 value=item["qty"],
+            #                 key=f"cart_qty_{i}"
+            #             )
+            #             item["qty"] = new_qty
+
+            #         with col2:
+            #             st.metric("Rate", f"₹ {item['rate']}")
+
+            #         with col3:
+            #             st.metric("Amount", f"₹ {new_qty * item['rate']}")
+
+            #         with col4:
+            #             if st.button("🗑", key=f"delete_{i}"):
+            #                 remove_index = i
+
+
+            # for i, item in enumerate(st.session_state.cart):
+
+            #     c1,c2,c3,c4,c5 = st.columns([4,1,1,1,1])
+
+            #     # Product Name
+            #     with c1:
+            #         st.write(item["masala_name"])
+
+            #     # Qty
+            #     with c2:
+
+            #         new_qty = st.number_input(
+            #             "",
+            #             min_value=1,
+            #             max_value=item["stock"],
+            #             value=item["qty"],
+            #             key=f"cart_qty_{i}"
+            #         )
+
+            #         item["qty"] = new_qty
+
+            #     # Rate
+            #     with c3:
+            #         st.write(f"₹ {item['rate']}")
+
+            #     amount = new_qty * item["rate"]
+            #     grand_total += amount
+
+            #     # Amount
+            #     with c4:
+            #         st.write(f"₹ {amount}")
+
+            #     # Delete
+            #     with c5:
+
+            #         if st.button("🗑", key=f"delete_{i}"):
+
+            #             remove_index = i
+
+                # st.divider()
+
+            if remove_index is not None:
+
+                st.session_state.cart.pop(remove_index)
+
+                st.rerun()
+
+            st.markdown("###")
+            st.success(f"Grand Total : ₹ {grand_total}")
+
+            col1,col2,col3 = st.columns(3)
+
+            with col1:
+
+                if st.button("⬅ Continue Shopping"):
+
+                    st.session_state.selected_category = None
+                    st.rerun()
+
+            with col2:
+
+                if st.button("🗑 Clear Cart"):
+
+                    st.session_state.cart = []
+                    st.rerun()
+
+            with col3:
+
+                if st.button("✅ Submit Order", use_container_width=True):
+                
+                    if len(st.session_state.cart) == 0:
+                        st.warning("Cart is Empty.")
+
                     else:
                     
                         cursor = connection.cursor()
-    
+
                         error = False
-    
-                        # ==================================
-                        # CHECK STOCK FIRST
-                        # ==================================
-    
+
+                        # -------- Check Stock First --------
                         for item in st.session_state.cart:
                         
-                            cursor.execute(
-                                """
+                            cursor.execute("""
                                 SELECT inventory_qty
                                 FROM masala_master
-                                WHERE id = %s
-                                """,
-                                (
-                                    item["id"],
-                                )
-                            )
-    
-                            result = cursor.fetchone()
-    
-                            # Product does not exist
-                            if result is None:
-                            
-                                st.error(
-                                    f"{item['masala_name']} "
-                                    f"not found in Product Master."
-                                )
-    
-                                error = True
-    
-                                continue
-                            
-                            stock = result[0]
-    
-                            # Store latest stock
-                            item["stock"] = stock
-    
-                            # Check quantity
+                                WHERE id=%s
+                            """, (item["id"],))
+
+                            stock = cursor.fetchone()[0]
+
                             if item["qty"] > stock:
                             
                                 st.error(
-                                    f"{item['masala_name']} "
-                                    f"has only {stock} Qty available."
+                                    f"{item['masala_name']} has only {stock} Qty available."
                                 )
-    
+
                                 error = True
-    
-                        # ==================================
-                        # SAVE ORDER
-                        # ==================================
-    
+
+                        # -------- Save Order --------
                         if not error:
                         
-                            try:
+                            for item in st.session_state.cart:
                             
-                                for item in st.session_state.cart:
-                                
-                                    amount = (
-                                        item["qty"]
-                                        *
-                                        item["rate"]
+                                amount = item["qty"] * item["rate"]
+
+                                # Insert Order
+                                cursor.execute("""
+                                    INSERT INTO masala_order
+                                    (
+                                        id,
+                                        cust_name,
+                                        masala_name,
+                                        qty,
+                                        rate,
+                                        amount,
+                                        business_date,
+                                        order_time
                                     )
-    
-                                    # ==================================
-                                    # DUPLICATE ORDER CHECK
-                                    # ==================================
-    
-                                    cursor.execute(
-                                        """
-                                        SELECT COUNT(*)
-                                        FROM masala_order
-                                        WHERE cust_name = %s
-                                        AND masala_name = %s
-                                        AND business_date = CURRENT_DATE
-                                        """,
-                                        (
-                                            customer_name,
-                                            item["masala_name"]
-                                        )
+                                    VALUES
+                                    (
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        %s,
+                                        CURRENT_DATE,
+                                        CURRENT_TIMESTAMP
                                     )
-    
-                                    count = cursor.fetchone()[0]
-    
-                                    if count > 0:
-                                    
-                                        st.warning(
-                                            f"{item['masala_name']} "
-                                            f"already ordered today."
-                                        )
-    
-                                        continue
-                                    
-                                    # ==================================
-                                    # INSERT ORDER
-                                    # ==================================
-    
-                                    cursor.execute(
-                                        """
-                                        INSERT INTO masala_order
-                                        (
-                                            id,
-                                            cust_name,
-                                            masala_name,
-                                            qty,
-                                            rate,
-                                            amount,
-                                            business_date,
-                                            order_time
-                                        )
-                                        VALUES
-                                        (
-                                            %s,
-                                            %s,
-                                            %s,
-                                            %s,
-                                            %s,
-                                            %s,
-                                            CURRENT_DATE,
-                                            CURRENT_TIMESTAMP
-                                        )
-                                        """,
-                                        (
-                                            item["id"],
-                                            customer_name,
-                                            item["masala_name"],
-                                            item["qty"],
-                                            item["rate"],
-                                            amount
-                                        )
-                                    )
-    
-                                    # ==================================
-                                    # REDUCE INVENTORY
-                                    # ==================================
-    
-                                    cursor.execute(
-                                        """
-                                        UPDATE masala_master
-                                        SET inventory_qty =
-                                            inventory_qty - %s
-                                        WHERE id = %s
-                                        """,
-                                        (
-                                            item["qty"],
-                                            item["id"]
-                                        )
-                                    )
-    
-                                # ==================================
-                                # COMMIT
-                                # ==================================
-    
-                                connection.commit()
-    
-                                st.success(
-                                    "✅ Order Submitted Successfully"
-                                )
-    
-                                # ==================================
-                                # CLEAR CART
-                                # ==================================
-    
-                                st.session_state.cart = []
-    
-                                # ==================================
-                                # RETURN TO CATEGORY
-                                # ==================================
-    
-                                st.session_state.selected_category = None
-    
-                                cursor.close()
-    
-                                st.rerun()
-    
-                            except Exception as e:
-                            
-                                # ==================================
-                                # ROLLBACK IF ERROR
-                                # ==================================
-    
-                                connection.rollback()
-    
-                                st.error(
-                                    f"Order submission failed: {e}"
-                                )
-    
-                                cursor.close()
-    
+                                """,
+                                (
+                                    item["id"],
+                                    st.session_state.get("customer_name"),
+                                    item["masala_name"],
+                                    item["qty"],
+                                    item["rate"],
+                                    amount
+                                ))
+
+                                # Reduce Inventory
+                                cursor.execute("""
+                                    UPDATE masala_master
+                                    SET inventory_qty = inventory_qty - %s
+                                    WHERE id = %s
+                                """,
+                                (
+                                    item["qty"],
+                                    item["id"]
+                                ))
+
+                            connection.commit()
+
+                            st.success("✅ Order Submitted Successfully")
+
+                            # Clear Cart
+                            st.session_state.cart = []
+
+                            # Return to Category Page
+                            st.session_state.selected_category = None
+
+                            cursor.close()
+
+                            st.rerun()
+
+
+
+
+
+
+
+
+
+
 
 # order_details()
