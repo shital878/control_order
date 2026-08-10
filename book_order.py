@@ -167,17 +167,26 @@ def order_details():
        BUTTONS
        ========================================== */
 
+    # .stButton > button,
+    # div[data-testid="stFormSubmitButton"] > button {
+    #     background: #28B463;
+    #     color: white;
+    #     border-radius: 8px;
+    #     height: 42px;
+    #     width: 100px;
+    #     font-weight: bold;
+    #     border: none;
+    # }
     .stButton > button,
-    div[data-testid="stFormSubmitButton"] > button {
-        background: #28B463;
-        color: white;
-        border-radius: 8px;
-        height: 42px;
-        width: 100px;
-        font-weight: bold;
-        border: none;
-    }
-
+div[data-testid="stFormSubmitButton"] > button {
+    background:#28B463;
+    color:white;
+    border-radius:8px;
+    height:38px;
+    width:150px;
+    font-weight:bold;
+    border:none;
+}
 
     /* ==========================================
        BUTTON HOVER
@@ -273,13 +282,15 @@ def order_details():
            BUTTONS
            ====================================== */
 
-        .stButton > button {
-            width: 50% !important;
-            min-width: 0 !important;
-            font-size: 12px !important;
-            padding: 5px !important;
-            white-space: nowrap !important;
-        }
+        .stButton > button,
+    div[data-testid="stFormSubmitButton"] > button {
+        width:100% !important;
+        height:36px !important;
+        font-size:13px !important;
+    }
+
+
+        
 
         /* ======================================
            CUSTOMER MESSAGE
@@ -446,28 +457,42 @@ def order_details():
 
                             st.rerun()
 
-
             else:
-            
+
                 category_id = st.session_state.selected_category
 
-                if st.button("⬅ Back"):
-                
+                # ==========================================
+                # BACK BUTTON
+                # ==========================================
+
+                if st.button(
+                    "⬅ Back",
+                    use_container_width=True
+                ):
+
                     st.session_state.selected_category = None
 
                     st.rerun()
 
-                cursor.execute("""
-                SELECT
-                    id,
-                    masala_name,
-                    rate,
-                    inventory_qty,
-                    masala_image
-                FROM masala_master
-                WHERE category_id=%s
-                ORDER BY masala_name
-                """,(category_id,))
+                # ==========================================
+                # GET PRODUCTS
+                # ==========================================
+
+                cursor.execute(
+                    """
+                    SELECT
+                        id,
+                        masala_name,
+                        rate,
+                        inventory_qty,
+                        masala_image
+                    FROM masala_master
+                    WHERE category_id = %s
+                    AND status = 'Active'
+                    ORDER BY masala_name
+                    """,
+                    (category_id,)
+                )
 
                 df = pd.DataFrame(
                     cursor.fetchall(),
@@ -480,141 +505,665 @@ def order_details():
                     ]
                 )
 
-                for _, row in df.iterrows():
+                # ==========================================
+                # CART INITIALIZE
+                # ==========================================
+
+                if "cart" not in st.session_state:
                 
-                    c1,c2,c3 = st.columns([0.7,0.6,0.4])
+                    st.session_state.cart = []
 
-                    with c1:
-                    
-                        st.image(
-                            os.path.join(
-                                "images",
-                                row["masala_image"]
-                            ),
-                            width=90
-                        )
+                # ==========================================
+                # NO PRODUCT
+                # ==========================================
 
-                    with c2:
-                    
-                        st.write("###",row["masala_name"])
-                        st.write("₹",row["rate"])
-                        st.write("Stock :",row["inventory_qty"])
-
-            # with c3:
-
-            #     qty = st.number_input(
-            #         "",
-            #         min_value=0,
-            #         key=f"qty_{row['id']}"
-            #     )
-
-        # *********************************************************************
-            # if "cart" not in st.session_state:
-            #     st.session_state.cart = []
-
-
-            # with c3:
-
-            #     qty = st.number_input(
-            #         "Qty",
-            #         min_value=0,
-            #         step=1,
-            #         key=f"qty_{row['id']}"
-            #     )
-
-            #     if st.button("Add", key=f"add_{row['id']}"):
+                if df.empty:
                 
-            #         if qty > 0:
+                    st.warning(
+                        "No products available in this category."
+                    )
+
+                else:
+                
+                    st.subheader("🛍️ Products")
+
+                    # ==========================================
+                    # PRODUCT LOOP
+                    # ==========================================
+
+                    for _, row in df.iterrows():
                     
-            #             # Prevent duplicate product in cart
-            #             found = False
+                        product_id = int(row["id"])
 
-            #             for item in st.session_state.cart:
-                        
-            #                 if item["id"] == row["id"]:
-            #                     item["qty"] += qty
-            #                     found = True
-            #                     break
-                            
-            #             if not found:
-                        
-            #                 st.session_state.cart.append({
-                            
-            #                     "id": row["id"],
-            #                     "masala_name": row["masala_name"],
-            #                     "qty": qty,
-            #                     "rate": row["rate"],
-            #                     "stock": row["inventory_qty"]
+                        product_name = row["masala_name"]
 
-            #                 })
+                        rate = float(row["rate"])
 
-            #             st.success(f"{row['masala_name']} added to cart")
-# ************************************************************************************************
-                    with c3:
-                    
                         stock = int(row["inventory_qty"])
 
-                        # Show stock
-                        st.write(f"Stock : {stock}")
+                        # ======================================
+                        # PRODUCT CARD
+                        # ======================================
 
-                        if stock <= 0:
+                        with st.container(border=True):
                         
-                            st.error("Out of Stock")
+                            # ----------------------------------
+                            # IMAGE + PRODUCT INFORMATION
+                            # ----------------------------------
 
-                        else:
-                        
-                            qty = st.number_input(
-                                "Qty",
-                                min_value=0,
-                                max_value=stock,      # Cannot order more than available stock
-                                step=1,
-                                key=f"qty_{row['id']}"
+                            c1, c2 = st.columns(
+                                [0.35, 1.65],
+                                gap="small"
                             )
 
-                            if st.button("Add", key=f"add_{row['id']}"):
+                            # ==================================
+                            # IMAGE
+                            # ==================================
+
+                            with c1:
                             
-                                if qty == 0:
-                                    st.warning("Please enter quantity greater than 0.")
+                                image_name = row["masala_image"]
+
+                                if image_name:
+                                
+                                    image_path = os.path.join(
+                                        "images",
+                                        image_name
+                                    )
+
+                                    if os.path.exists(
+                                        image_path
+                                    ):
+
+                                        st.image(
+                                            image_path,
+                                            width=55
+                                        )
+
+                                    else:
+                                    
+                                        st.write("🛍️")
 
                                 else:
                                 
+                                    st.write("🛍️")
+
+                            # ==================================
+                            # PRODUCT NAME / RATE / STOCK
+                            # ==================================
+
+                            with c2:
+                            
+                                st.markdown(
+                                    f"""
+                                    <div style="
+                                        font-size:14px;
+                                        font-weight:600;
+                                        line-height:18px;
+                                        word-break:break-word;
+                                    ">
+                                        {product_name}
+                                    </div>
+
+                                    <div style="
+                                        font-size:13px;
+                                        margin-top:3px;
+                                    ">
+                                        ₹ {rate:.2f}
+                                    </div>
+
+                                    <div style="
+                                        font-size:12px;
+                                        margin-top:2px;
+                                    ">
+                                        Stock : {stock}
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True
+                                )
+
+                            # ==================================
+                            # OUT OF STOCK
+                            # ==================================
+
+                            if stock <= 0:
+                            
+                                st.error(
+                                    "❌ Out of Stock"
+                                )
+
+                            else:
+                            
+                                # ==================================
+                                # PRODUCT FORM
+                                # ==================================
+
+                                with st.form(
+                                    key=f"product_form_{product_id}",
+                                    clear_on_submit=True
+                                ):
+
+                                    # ----------------------------------
+                                    # QTY + AMOUNT
+                                    # ----------------------------------
+
+                                    q1, q2 = st.columns(
+                                        [0.2, 1.2],
+                                        gap="small"
+                                    )
+
+                                    # ==================================
+                                    # QUANTITY
+                                    # ==================================
+
+                                    with q1:
+                                    
+                                        qty = st.number_input(
+                                            "Qty",
+                                            min_value=1,
+                                            max_value=stock,
+                                            value=1,
+                                            step=1,
+                                            key=f"qty_{product_id}"
+                                        )
+
+                                    # ==================================
+                                    # AMOUNT
+                                    # ==================================
+
+                                    with q2:
+                                    
+                                        amount = qty * rate
+
+                                        st.markdown(
+                                            f"""
+                                            <div style="
+                                                font-size:13px;
+                                                margin-top:28px;
+                                            ">
+                                                <b>Amount :</b>
+                                                ₹ {amount:.2f}
+                                            </div>
+                                            """,
+                                            unsafe_allow_html=True
+                                        )
+
+                                    # ==================================
+                                    # ADD TO CART
+                                    # ==================================
+
+                                    add_product = st.form_submit_button(
+                                        "🛒 Add to Cart",
+                                        use_container_width=True
+                                    )
+
+                                # ==================================
+                                # ADD PRODUCT AFTER FORM SUBMIT
+                                # ==================================
+
+                                if add_product:
+                                
                                     found = False
+
+                                    # ------------------------------
+                                    # CHECK EXISTING CART
+                                    # ------------------------------
 
                                     for item in st.session_state.cart:
                                     
-                                        if item["id"] == row["id"]:
+                                        if item["id"] == product_id:
                                         
-                                            # Prevent exceeding stock
-                                            if item["qty"] + qty > stock:
-                                                st.error(f"Only {stock} items available.")
+                                            new_qty = (
+                                                item["qty"] + qty
+                                            )
+
+                                            # --------------------------
+                                            # STOCK CHECK
+                                            # --------------------------
+
+                                            if new_qty > stock:
+                                            
+                                                st.error(
+                                                    f"Only {stock} "
+                                                    f"{product_name} "
+                                                    f"available."
+                                                )
+
                                             else:
-                                                item["qty"] += qty
-                                                st.success(f"{row['masala_name']} quantity updated.")
+                                            
+                                                item["qty"] = new_qty
+
+                                                st.success(
+                                                    f"{product_name} "
+                                                    f"quantity updated."
+                                                )
 
                                             found = True
+
                                             break
                                         
+                                    # ------------------------------
+                                    # NEW PRODUCT
+                                    # ------------------------------
+
                                     if not found:
                                     
-                                        # st.session_state.cart.append({
-                                        #     "id": row["id"],
-                                        #     "masala_name": row["masala_name"],
-                                        #     "qty": qty,
-                                        #     "rate": row["rate"],
-                                        #     "stock": stock
-                                        # })
+                                        st.session_state.cart.append(
+                                            {
+                                                "id": product_id,
+                                                "masala_name": product_name,
+                                                "qty": qty,
+                                                "rate": rate,
+                                                "stock": stock
+                                            }
+                                        )
 
-                                        st.session_state.customer_name = cust_name
+                                        st.success(
+                                            f"✅ {product_name} "
+                                            f"added to cart."
+                                        )
 
-                                        st.session_state.cart.append({
-                                            "id": row["id"],
-                                            "masala_name": row["masala_name"],
-                                            "qty": qty,
-                                            "rate": row["rate"],
-                                            "stock": stock
-                                        })
+                        # ------------------------------
+                        # RERUN
+                        # ------------------------------
 
-                                        st.success(f"{row['masala_name']} added to cart.")
+                        # st.rerun()
+
+
+            
+            # else:
+            
+            #     category_id = st.session_state.selected_category
+
+            #     if st.button("⬅ Back"):
+                
+            #         st.session_state.selected_category = None
+            #         st.rerun()
+
+            #     cursor.execute("""
+            #         SELECT
+            #             id,
+            #             masala_name,
+            #             rate,
+            #             inventory_qty,
+            #             masala_image
+            #         FROM masala_master
+            #         WHERE category_id=%s
+            #         ORDER BY masala_name
+            #     """, (category_id,))
+
+            #     df = pd.DataFrame(
+            #         cursor.fetchall(),
+            #         columns=[
+            #             "id",
+            #             "masala_name",
+            #             "rate",
+            #             "inventory_qty",
+            #             "masala_image"
+            #         ]
+            #     )
+
+            #     # ==========================================
+            #     # NEW COMPACT PRODUCT DISPLAY
+            #     # ==========================================
+
+            #     for _, row in df.iterrows():
+                
+            #         stock = int(row["inventory_qty"])
+
+            #         c1, c2, c3 = st.columns(
+            #             [0.35, .8, 0.25],
+            #             gap="small"
+            #         )
+
+            #         with c1:
+                    
+            #             if row["masala_image"]:
+                        
+            #                 image_path = os.path.join(
+            #                     "images",
+            #                     row["masala_image"]
+            #                 )
+
+            #                 if os.path.exists(image_path):
+                            
+            #                     st.image(
+            #                         image_path,
+            #                         width=50
+            #                     )
+
+            #         with c2:
+                    
+            #             st.markdown(
+            #                 f"""
+            #                 <div style="
+            #                     font-size:14px;
+            #                     font-weight:600;
+            #                     line-height:18px;
+            #                     word-break:break-word;
+            #                     margin-top:5px;
+            #                 ">
+            #                     {row["masala_name"]}
+            #                 </div>
+
+            #                 <div style="
+            #                     font-size:13px;
+            #                     margin-top:3px;
+            #                 ">
+            #                     ₹ {row["rate"]}
+            #                 </div>
+            #                 """,
+            #                 unsafe_allow_html=True
+            #             )
+            #     with c3:
+
+            #         if stock <= 0:
+                    
+            #             st.caption("Out")
+
+            #         else:
+                    
+            #             st.caption("Qty")
+
+            #             qty = st.number_input(
+            #                 "",
+            #                 min_value=0,
+            #                 max_value=stock,
+            #                 step=1,
+            #                 value=0,
+            #                 key=f"qty_{row['id']}",
+            #                 label_visibility="collapsed"
+            #             )
+
+            #             if st.button(
+            #                 "Add",
+            #                 key=f"add_{row['id']}",
+            #                 use_container_width=True
+            #             ):
+
+            #                 if qty <= 0:
+                            
+            #                     st.warning("Enter Qty")
+
+            #                 else:
+                            
+            #                     found = False
+
+            #                     for item in st.session_state.cart:
+                                
+            #                         if item["id"] == row["id"]:
+                                    
+            #                             if item["qty"] + qty > stock:
+                                        
+            #                                 st.error(
+            #                                     f"Only {stock} available."
+            #                                 )
+
+            #                             else:
+                                        
+            #                                 item["qty"] += qty
+
+            #                                 st.success(
+            #                                     "Quantity updated"
+            #                                 )
+
+            #                             found = True
+            #                             break
+                                    
+            #                     if not found:
+                                
+            #                         st.session_state.cart.append({
+            #                             "id": int(row["id"]),
+            #                             "masala_name": row["masala_name"],
+            #                             "qty": qty,
+            #                             "rate": float(row["rate"]),
+            #                             "stock": stock
+            #                         })
+
+            #                         st.success(
+            #                             f"{row['masala_name']} added"
+            #                         )
+
+
+
+
+
+
+                    # with c3:
+                    
+                    #     if stock <= 0:
+                        
+                    #         st.caption("Out")
+
+                    #     else:
+                        
+                    #         qty = st.number_input(
+                    #             "Qty",
+                    #             min_value=0,
+                    #             max_value=stock,
+                    #             step=1,
+                    #             key=f"qty_{row['id']}"
+                    #         )
+
+                    #         if st.button(
+                    #             "Add",
+                    #             key=f"add_{row['id']}",
+                    #             use_container_width=True
+                    #         ):
+
+                    #             if qty <= 0:
+                                
+                    #                 st.warning("Enter Qty")
+
+                    #             else:
+                                
+                    #                 found = False
+
+                    #                 for item in st.session_state.cart:
+                                    
+                    #                     if item["id"] == row["id"]:
+                                        
+                    #                         if item["qty"] + qty > stock:
+                                            
+                    #                             st.error(
+                    #                                 f"Only {stock} available."
+                    #                             )
+
+                    #                         else:
+                                            
+                    #                             item["qty"] += qty
+
+                    #                             st.success(
+                    #                                 "Quantity updated"
+                    #                             )
+
+                    #                         found = True
+                    #                         break
+                                        
+                    #                 if not found:
+                                    
+                    #                     st.session_state.cart.append({
+                    #                         "id": int(row["id"]),
+                    #                         "masala_name": row["masala_name"],
+                    #                         "qty": qty,
+                    #                         "rate": float(row["rate"]),
+                    #                         "stock": stock
+                    #                     })
+
+                    #                     st.success(
+                    #                         f"{row['masala_name']} added"
+                    #                     )
+
+                    st.divider()
+
+#             else:
+            
+#                 category_id = st.session_state.selected_category
+
+#                 if st.button("⬅ Back"):
+                
+#                     st.session_state.selected_category = None
+
+#                     st.rerun()
+
+#                 cursor.execute("""
+#                 SELECT
+#                     id,
+#                     masala_name,
+#                     rate,
+#                     inventory_qty,
+#                     masala_image
+#                 FROM masala_master
+#                 WHERE category_id=%s
+#                 ORDER BY masala_name
+#                 """,(category_id,))
+
+#                 df = pd.DataFrame(
+#                     cursor.fetchall(),
+#                     columns=[
+#                         "id",
+#                         "masala_name",
+#                         "rate",
+#                         "inventory_qty",
+#                         "masala_image"
+#                     ]
+#                 )
+
+#                 for _, row in df.iterrows():
+                
+#                     c1,c2,c3 = st.columns([0.7,0.6,0.4])
+
+#                     with c1:
+                    
+#                         st.image(
+#                             os.path.join(
+#                                 "images",
+#                                 row["masala_image"]
+#                             ),
+#                             width=90
+#                         )
+
+#                     with c2:
+                    
+#                         st.write("###",row["masala_name"])
+#                         st.write("₹",row["rate"])
+#                         st.write("Stock :",row["inventory_qty"])
+
+#             # with c3:
+
+#             #     qty = st.number_input(
+#             #         "",
+#             #         min_value=0,
+#             #         key=f"qty_{row['id']}"
+#             #     )
+
+#         # *********************************************************************
+#             # if "cart" not in st.session_state:
+#             #     st.session_state.cart = []
+
+
+#             # with c3:
+
+#             #     qty = st.number_input(
+#             #         "Qty",
+#             #         min_value=0,
+#             #         step=1,
+#             #         key=f"qty_{row['id']}"
+#             #     )
+
+#             #     if st.button("Add", key=f"add_{row['id']}"):
+                
+#             #         if qty > 0:
+                    
+#             #             # Prevent duplicate product in cart
+#             #             found = False
+
+#             #             for item in st.session_state.cart:
+                        
+#             #                 if item["id"] == row["id"]:
+#             #                     item["qty"] += qty
+#             #                     found = True
+#             #                     break
+                            
+#             #             if not found:
+                        
+#             #                 st.session_state.cart.append({
+                            
+#             #                     "id": row["id"],
+#             #                     "masala_name": row["masala_name"],
+#             #                     "qty": qty,
+#             #                     "rate": row["rate"],
+#             #                     "stock": row["inventory_qty"]
+
+#             #                 })
+
+#             #             st.success(f"{row['masala_name']} added to cart")
+# # ************************************************************************************************
+#                     with c3:
+                    
+#                         stock = int(row["inventory_qty"])
+
+#                         # Show stock
+#                         st.write(f"Stock : {stock}")
+
+#                         if stock <= 0:
+                        
+#                             st.error("Out of Stock")
+
+#                         else:
+                        
+#                             qty = st.number_input(
+#                                 "Qty",
+#                                 min_value=0,
+#                                 max_value=stock,      # Cannot order more than available stock
+#                                 step=1,
+#                                 key=f"qty_{row['id']}"
+#                             )
+
+#                             if st.button("Add", key=f"add_{row['id']}"):
+                            
+#                                 if qty == 0:
+#                                     st.warning("Please enter quantity greater than 0.")
+
+#                                 else:
+                                
+#                                     found = False
+
+#                                     for item in st.session_state.cart:
+                                    
+#                                         if item["id"] == row["id"]:
+                                        
+#                                             # Prevent exceeding stock
+#                                             if item["qty"] + qty > stock:
+#                                                 st.error(f"Only {stock} items available.")
+#                                             else:
+#                                                 item["qty"] += qty
+#                                                 st.success(f"{row['masala_name']} quantity updated.")
+
+#                                             found = True
+#                                             break
+                                        
+#                                     if not found:
+                                    
+#                                         # st.session_state.cart.append({
+#                                         #     "id": row["id"],
+#                                         #     "masala_name": row["masala_name"],
+#                                         #     "qty": qty,
+#                                         #     "rate": row["rate"],
+#                                         #     "stock": stock
+#                                         # })
+
+#                                         st.session_state.customer_name = cust_name
+
+#                                         st.session_state.cart.append({
+#                                             "id": row["id"],
+#                                             "masala_name": row["masala_name"],
+#                                             "qty": qty,
+#                                             "rate": row["rate"],
+#                                             "stock": stock
+#                                         })
+
+#                                         st.success(f"{row['masala_name']} added to cart.")
 
 
        # ==========================================
