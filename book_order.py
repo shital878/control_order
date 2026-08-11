@@ -95,215 +95,500 @@ def order_details():
 # """, unsafe_allow_html=True)
 
 
-    st.markdown("""
-    <style>
+#     st.markdown("""
+#     <style>
 
-    /* ==========================================
-       MAIN BACKGROUND
-       ========================================== */
+#     /* ==========================================
+#        MAIN BACKGROUND
+#        ========================================== */
 
-    [data-testid="stAppViewContainer"] {
-        background: linear-gradient(
-            to right,
-            #d6eaf8,
-            #f9ebea
-        );
-    }
-
-
-    /* ==========================================
-       CENTER TITLE
-       ========================================== */
-
-    .main-title {
-        font-size: 40px;
-        font-weight: bold;
-        text-align: center;
-        color: #154360;
-        margin-bottom: 25px;
-    }
+#     [data-testid="stAppViewContainer"] {
+#         background: linear-gradient(
+#             to right,
+#             #d6eaf8,
+#             #f9ebea
+#         );
+#     }
 
 
-    /* ==========================================
-       CARD DESIGN
-       ========================================== */
+#     /* ==========================================
+#        CENTER TITLE
+#        ========================================== */
 
-    .card {
-        background: white;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
-        margin-bottom: 20px;
-    }
-
-
-    /* ==========================================
-       TEXT INPUT
-       ========================================== */
-
-    div[data-baseweb="input"] > div {
-        background-color: #fdfefe;
-        border: 2px solid #2E86C1;
-        border-radius: 8px;
-    }
-
-    div[data-baseweb="input"] > div:focus-within {
-        border: 2px solid #1B4F72;
-        background-color: #EBF5FB;
-    }
+#     .main-title {
+#         font-size: 40px;
+#         font-weight: bold;
+#         text-align: center;
+#         color: #154360;
+#         margin-bottom: 25px;
+#     }
 
 
-    /* ==========================================
-       LABELS
-       ========================================== */
+#     /* ==========================================
+#        CARD DESIGN
+#        ========================================== */
 
-    label {
-        color: #154360 !important;
-        font-weight: 600;
-    }
-
-
-    /* ==========================================
-       BUTTONS
-       ========================================== */
-
-    # .stButton > button,
-    # div[data-testid="stFormSubmitButton"] > button {
-    #     background: #28B463;
-    #     color: white;
-    #     border-radius: 8px;
-    #     height: 42px;
-    #     width: 100px;
-    #     font-weight: bold;
-    #     border: none;
-    # }
-    .stButton > button,
-div[data-testid="stFormSubmitButton"] > button {
-    background:#28B463;
-    color:white;
-    border-radius:8px;
-    height:38px;
-    width:150px;
-    font-weight:bold;
-    border:none;
-}
-
-    /* ==========================================
-       BUTTON HOVER
-       ========================================== */
-
-    .stButton > button:hover,
-    div[data-testid="stFormSubmitButton"] > button:hover {
-        background: #1D8348;
-        color: white;
-    }
+#     .card {
+#         background: white;
+#         padding: 30px;
+#         border-radius: 12px;
+#         box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+#         margin-bottom: 20px;
+#     }
 
 
-    /* ==========================================
-       SIDEBAR
-       ========================================== */
+#     /* ==========================================
+#        TEXT INPUT
+#        ========================================== */
 
-    section[data-testid="stSidebar"] {
-        background-color: #F8C471;
-    }
+#     div[data-baseweb="input"] > div {
+#         background-color: #fdfefe;
+#         border: 2px solid #2E86C1;
+#         border-radius: 8px;
+#     }
+
+#     div[data-baseweb="input"] > div:focus-within {
+#         border: 2px solid #1B4F72;
+#         background-color: #EBF5FB;
+#     }
 
 
-    /* ==========================================
-       MOBILE RESPONSIVE DESIGN
-       ========================================== */
+#     /* ==========================================
+#        LABELS
+#        ========================================== */
 
-    @media (max-width: 768px) {
+#     label {
+#         color: #154360 !important;
+#         font-weight: 600;
+#     }
 
-        /* Page spacing */
-        .block-container {
-            padding-left: 10px !important;
-            padding-right: 10px !important;
-            padding-top: 15px !important;
-        }
 
-        /* Main title */
-        .main-title {
-            font-size: 28px !important;
-            margin-bottom: 15px !important;
-        }
+#     /* ==========================================
+#        BUTTONS
+#        ========================================== */
 
-        /* Headings */
-        h1 {
-            font-size: 28px !important;
-        }
+#     # .stButton > button,
+#     # div[data-testid="stFormSubmitButton"] > button {
+#     #     background: #28B463;
+#     #     color: white;
+#     #     border-radius: 8px;
+#     #     height: 42px;
+#     #     width: 100px;
+#     #     font-weight: bold;
+#     #     border: none;
+#     # }
+#     .stButton > button,
+# div[data-testid="stFormSubmitButton"] > button {
+#     background:#28B463;
+#     color:white;
+#     border-radius:8px;
+#     height:38px;
+#     width:150px;
+#     font-weight:bold;
+#     border:none;
+# }
 
-        h2 {
-            font-size: 23px !important;
-        }
+#     /* ==========================================
+#        BUTTON HOVER
+#        ========================================== */
 
-        h3 {
-            font-size: 20px !important;
-        }
+#     .stButton > button:hover,
+#     div[data-testid="stFormSubmitButton"] > button:hover {
+#         background: #1D8348;
+#         color: white;
+#     }
 
-        /* ======================================
-           KEEP CART COLUMNS HORIZONTAL
-           ====================================== */
 
-        div[data-testid="stHorizontalBlock"] {
-            flex-wrap: nowrap !important;
-            gap: 8px !important;
-            align-items: center !important;
-        }
+#     /* ==========================================
+#        SIDEBAR
+#        ========================================== */
 
-        div[data-testid="column"] {
-            min-width: 0 !important;
-            padding: 0 !important;
-        }
+#     section[data-testid="stSidebar"] {
+#         background-color: #F8C471;
+#     }
 
-        /* ======================================
-           NUMBER INPUT
-           ====================================== */
 
-        div[data-testid="stNumberInput"] {
-            width: 100% !important;
-        }
+#     /* ==========================================
+#        MOBILE RESPONSIVE DESIGN
+#        ========================================== */
 
-        div[data-testid="stNumberInput"] input {
-            font-size: 14px !important;
-            padding-left: 5px !important;
-            padding-right: 5px !important;
-        }
+#     @media (max-width: 768px) {
 
-        /* ======================================
-           CART TEXT
-           ====================================== */
+#         /* Page spacing */
+#         .block-container {
+#             padding-left: 10px !important;
+#             padding-right: 10px !important;
+#             padding-top: 15px !important;
+#         }
 
-        div[data-testid="column"] p {
-            font-size: 13px !important;
-            word-break: break-word !important;
-        }
+#         /* Main title */
+#         .main-title {
+#             font-size: 28px !important;
+#             margin-bottom: 15px !important;
+#         }
 
-        /* ======================================
-           BUTTONS
-           ====================================== */
+#         /* Headings */
+#         h1 {
+#             font-size: 28px !important;
+#         }
 
-        .stButton > button,
-    div[data-testid="stFormSubmitButton"] > button {
-        width:100% !important;
-        height:36px !important;
-        font-size:13px !important;
-    }
+#         h2 {
+#             font-size: 23px !important;
+#         }
+
+#         h3 {
+#             font-size: 20px !important;
+#         }
+
+#         /* ======================================
+#            KEEP CART COLUMNS HORIZONTAL
+#            ====================================== */
+
+#         div[data-testid="stHorizontalBlock"] {
+#             flex-wrap: nowrap !important;
+#             gap: 8px !important;
+#             align-items: center !important;
+#         }
+
+#         div[data-testid="column"] {
+#             min-width: 0 !important;
+#             padding: 0 !important;
+#         }
+
+#         /* ======================================
+#            NUMBER INPUT
+#            ====================================== */
+
+#         div[data-testid="stNumberInput"] {
+#             width: 100% !important;
+#         }
+
+#         div[data-testid="stNumberInput"] input {
+#             font-size: 14px !important;
+#             padding-left: 5px !important;
+#             padding-right: 5px !important;
+#         }
+
+#         /* ======================================
+#            CART TEXT
+#            ====================================== */
+
+#         div[data-testid="column"] p {
+#             font-size: 13px !important;
+#             word-break: break-word !important;
+#         }
+
+#         /* ======================================
+#            BUTTONS
+#            ====================================== */
+
+#         .stButton > button,
+#     div[data-testid="stFormSubmitButton"] > button {
+#         width:100% !important;
+#         height:36px !important;
+#         font-size:13px !important;
+#     }
 
 
         
 
-        /* ======================================
-           CUSTOMER MESSAGE
-           ====================================== */
+#         /* ======================================
+#            CUSTOMER MESSAGE
+#            ====================================== */
 
-        div[data-testid="stAlert"] {
-            font-size: 14px !important;
-        }
+#         div[data-testid="stAlert"] {
+#             font-size: 14px !important;
+#         }
+
+#     }
+
+#     </style>
+#     """, unsafe_allow_html=True)
+
+    st.markdown("""
+<style>
+
+/* ==========================================
+   MAIN BACKGROUND
+   ========================================== */
+
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(
+        to right,
+        #d6eaf8,
+        #f9ebea
+    );
+}
+
+
+/* ==========================================
+   CENTER TITLE
+   ========================================== */
+
+.main-title {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    color: #154360;
+    margin-bottom: 25px;
+}
+
+
+/* ==========================================
+   CARD
+   ========================================== */
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+
+/* ==========================================
+   INPUT
+   ========================================== */
+
+div[data-baseweb="input"] > div {
+    background-color: #fdfefe;
+    border: 2px solid #2E86C1;
+    border-radius: 8px;
+}
+
+div[data-baseweb="input"] > div:focus-within {
+    border: 2px solid #1B4F72;
+    background-color: #EBF5FB;
+}
+
+
+/* ==========================================
+   LABEL
+   ========================================== */
+
+label {
+    color: #154360 !important;
+    font-weight: 600;
+}
+
+
+/* ==========================================
+   NORMAL BUTTON
+   ========================================== */
+
+.stButton > button {
+
+    background: #28B463;
+    color: white;
+
+    border-radius: 8px;
+
+    height: 38px;
+
+    width: auto;
+
+    padding-left: 18px;
+    padding-right: 18px;
+
+    font-weight: bold;
+
+    border: none;
+}
+
+
+/* ==========================================
+   FORM SUBMIT BUTTON
+   ========================================== */
+
+div[data-testid="stFormSubmitButton"] > button {
+
+    background: #28B463;
+    color: white;
+
+    border-radius: 8px;
+
+    height: 38px;
+
+    width: 110px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+
+    font-weight: bold;
+
+    border: none;
+}
+
+
+/* ==========================================
+   BUTTON HOVER
+   ========================================== */
+
+.stButton > button:hover,
+div[data-testid="stFormSubmitButton"] > button:hover {
+
+    background: #1D8348;
+    color: white;
+}
+
+
+/* ==========================================
+   SIDEBAR
+   ========================================== */
+
+section[data-testid="stSidebar"] {
+    background-color: #F8C471;
+}
+
+
+/* ==========================================
+   MOBILE
+   ========================================== */
+
+@media (max-width: 768px) {
+
+    .block-container {
+
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        padding-top: 10px !important;
 
     }
 
-    </style>
-    """, unsafe_allow_html=True)
+
+    .main-title {
+
+        font-size: 27px !important;
+        margin-bottom: 12px !important;
+
+    }
+
+
+    h1 {
+
+        font-size: 27px !important;
+
+    }
+
+
+    h2 {
+
+        font-size: 22px !important;
+
+    }
+
+
+    h3 {
+
+        font-size: 19px !important;
+
+    }
+
+
+    /* --------------------------------------
+       PRODUCT CARD COLUMNS
+       -------------------------------------- */
+
+    div[data-testid="stHorizontalBlock"] {
+
+        gap: 8px !important;
+
+    }
+
+
+    div[data-testid="column"] {
+
+        padding-left: 3px !important;
+        padding-right: 3px !important;
+
+        min-width: 0 !important;
+
+    }
+
+
+    /* --------------------------------------
+       PRODUCT IMAGE
+       -------------------------------------- */
+
+    div[data-testid="stImage"] img {
+
+        max-width: 70px !important;
+        height: auto !important;
+
+    }
+
+
+    /* --------------------------------------
+       PRODUCT TEXT
+       -------------------------------------- */
+
+    div[data-testid="column"] p {
+
+        font-size: 13px !important;
+
+    }
+
+
+    /* --------------------------------------
+       QTY INPUT
+       -------------------------------------- */
+
+    div[data-testid="stNumberInput"] {
+
+        width: 100% !important;
+
+    }
+
+
+    div[data-testid="stNumberInput"] input {
+
+        font-size: 13px !important;
+
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+
+    }
+
+
+    /* --------------------------------------
+       ADD BUTTON
+       -------------------------------------- */
+
+    div[data-testid="stFormSubmitButton"] > button {
+
+        width: 90px !important;
+
+        height: 35px !important;
+
+        font-size: 12px !important;
+
+        padding: 4px 8px !important;
+
+    }
+
+
+    /* --------------------------------------
+       NORMAL BUTTON
+       -------------------------------------- */
+
+    .stButton > button {
+
+        width: auto !important;
+
+        height: 35px !important;
+
+        font-size: 12px !important;
+
+        padding: 4px 12px !important;
+
+    }
+
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
 
 
 
@@ -370,395 +655,805 @@ div[data-testid="stFormSubmitButton"] > button {
 
 # ================= ORDER PAGE =================
 
-    # if menu == "Order":
+
     if menu == "Order":
-    
-            cursor = connection.cursor()
-    
-            # ================= CUSTOMER =================
-    
+
+        cursor = connection.cursor()
+
+        # =========================================================
+        # CUSTOMER
+        # =========================================================
+
+        cursor.execute("""
+            SELECT shop_name
+            FROM customer
+            ORDER BY shop_name
+        """)
+
+        cust_df = pd.DataFrame(
+            cursor.fetchall(),
+            columns=["shop_name"]
+        )
+
+        if cust_df.empty:
+
+            st.warning("No Customers Found.")
+            st.stop()
+
+        # Customer selection
+
+        cust_name = st.selectbox(
+            "Select Customer",
+            cust_df["shop_name"],
+            key="customer_select"
+        )
+
+        # Save customer in session
+
+        st.session_state.customer_name = cust_name
+
+
+        # =========================================================
+        # INITIALIZE CATEGORY
+        # =========================================================
+
+        if "selected_category" not in st.session_state:
+
+            st.session_state.selected_category = None
+
+
+        # =========================================================
+        # INITIALIZE CART
+        # =========================================================
+
+        if "cart" not in st.session_state:
+
+            st.session_state.cart = []
+
+
+        # =========================================================
+        # CATEGORY PAGE
+        # =========================================================
+
+        if st.session_state.selected_category is None:
+
             cursor.execute("""
-                SELECT shop_name
-                FROM customer
-                ORDER BY shop_name
-            """)
-    
-            cust_df = pd.DataFrame(
-                cursor.fetchall(),
-                columns=["shop_name"]
-            )
-    
-            if cust_df.empty:
-                st.warning("No Customers Found.")
-                st.stop()
-    
-            # cust_name = st.selectbox(
-            #     "Select Customer",
-            #     cust_df["shop_name"]
-            # )
-
-            cust_name = st.selectbox(
-    "Select Customer",
-    cust_df["shop_name"],
-    key="customer_select"
-)
-
-# Save customer in session
-            st.session_state.customer_name = cust_name
-            
-
-            if "selected_category" not in st.session_state:
-                st.session_state.selected_category = None
-
-            if st.session_state.selected_category is None:
-            
-                cursor.execute("""
                 SELECT
                     category_id,
                     category_name,
                     category_image
                 FROM category_master
                 ORDER BY category_name
-                """)
+            """)
 
-                category_df = pd.DataFrame(
-                    cursor.fetchall(),
-                    columns=[
-                        "category_id",
-                        "category_name",
-                        "category_image"
-                    ]
+            category_df = pd.DataFrame(
+                cursor.fetchall(),
+                columns=[
+                    "category_id",
+                    "category_name",
+                    "category_image"
+                ]
+            )
+
+
+            if category_df.empty:
+
+                st.warning(
+                    "No Categories Found."
                 )
+
+            else:
+
+                st.subheader("📂 Select Category")
+
+                # 3 columns for category
 
                 cols = st.columns(3)
 
                 for i, row in category_df.iterrows():
-                
-                    col = cols[i % 9]
 
-                    image_path = os.path.join(
-                        "images",
-                        row["category_image"]
-                    )
+                    col = cols[i % 3]
 
                     with col:
-                    
-                        st.image(image_path, width=120)
+
+                        # -----------------------------
+                        # CATEGORY IMAGE
+                        # -----------------------------
+
+                        if row["category_image"]:
+
+                            image_path = os.path.join(
+                                "images",
+                                row["category_image"]
+                            )
+
+                            if os.path.exists(image_path):
+
+                                st.image(
+                                    image_path,
+                                    width=100
+                                )
+
+                        # -----------------------------
+                        # CATEGORY BUTTON
+                        # -----------------------------
 
                         if st.button(
                             row["category_name"],
-                            key=row["category_id"]
+                            key=f"category_{row['category_id']}",
+                            use_container_width=True
                         ):
 
-                            st.session_state.selected_category = row["category_id"]
+                            st.session_state.selected_category = (
+                                row["category_id"]
+                            )
 
                             st.rerun()
 
+
+        # =========================================================
+        # PRODUCT PAGE
+        # =========================================================
+
+        else:
+
+            category_id = (
+                st.session_state.selected_category
+            )
+
+
+            # =====================================================
+            # BACK BUTTON
+            # =====================================================
+
+            if st.button(
+                "⬅ Back",
+                use_container_width=False
+            ):
+
+                st.session_state.selected_category = None
+
+                st.rerun()
+
+
+            # =====================================================
+            # GET PRODUCTS
+            # =====================================================
+
+            cursor.execute(
+                """
+                SELECT
+                    id,
+                    masala_name,
+                    rate,
+                    inventory_qty,
+                    masala_image
+                FROM masala_master
+                WHERE category_id = %s
+                AND status = 'Active'
+                ORDER BY masala_name
+                """,
+                (category_id,)
+            )
+
+
+            df = pd.DataFrame(
+                cursor.fetchall(),
+                columns=[
+                    "id",
+                    "masala_name",
+                    "rate",
+                    "inventory_qty",
+                    "masala_image"
+                ]
+            )
+
+
+            # =====================================================
+            # NO PRODUCTS
+            # =====================================================
+
+            if df.empty:
+
+                st.warning(
+                    "No products available in this category."
+                )
+
             else:
 
-                category_id = st.session_state.selected_category
+                st.subheader("🛍️ Products")
 
-                # ==========================================
-                # BACK BUTTON
-                # ==========================================
 
-                if st.button(
-                    "⬅ Back",
-                    use_container_width=True
-                ):
+                # =================================================
+                # PRODUCT LOOP
+                # =================================================
 
-                    st.session_state.selected_category = None
+                for _, row in df.iterrows():
 
-                    st.rerun()
+                    product_id = int(row["id"])
+                    product_name = row["masala_name"]
+                    rate = float(row["rate"])
+                    stock = int(row["inventory_qty"])
 
-                # ==========================================
-                # GET PRODUCTS
-                # ==========================================
+                    image_path = None
 
-                cursor.execute(
-                    """
-                    SELECT
-                        id,
-                        masala_name,
-                        rate,
-                        inventory_qty,
-                        masala_image
-                    FROM masala_master
-                    WHERE category_id = %s
-                    AND status = 'Active'
-                    ORDER BY masala_name
-                    """,
-                    (category_id,)
-                )
-
-                df = pd.DataFrame(
-                    cursor.fetchall(),
-                    columns=[
-                        "id",
-                        "masala_name",
-                        "rate",
-                        "inventory_qty",
-                        "masala_image"
-                    ]
-                )
-
-                # ==========================================
-                # CART INITIALIZE
-                # ==========================================
-
-                if "cart" not in st.session_state:
-                
-                    st.session_state.cart = []
-
-                # ==========================================
-                # NO PRODUCT
-                # ==========================================
-
-                if df.empty:
-                
-                    st.warning(
-                        "No products available in this category."
-                    )
-
-                else:
-                
-                    st.subheader("🛍️ Products")
+                    if row["masala_image"]:
+                        image_path = os.path.join(
+                            "images",
+                            row["masala_image"]
+                        )
 
                     # ==========================================
-                    # PRODUCT LOOP
+                    # PRODUCT CARD
                     # ==========================================
 
-                    for _, row in df.iterrows():
+                    with st.container(border=True):
                     
-                        product_id = int(row["id"])
+                        # LEFT = IMAGE + DETAILS
+                        # RIGHT = QTY + ADD
 
-                        product_name = row["masala_name"]
-
-                        rate = float(row["rate"])
-
-                        stock = int(row["inventory_qty"])
+                        left, right = st.columns(
+                            [1.3, 0.7],
+                            gap="small"
+                        )
 
                         # ======================================
-                        # PRODUCT CARD
+                        # LEFT SIDE
+                        # IMAGE
+                        # PRODUCT NAME
+                        # RATE
+                        # STOCK
                         # ======================================
 
-                        with st.container(border=True):
+                        with left:
                         
-                            # ----------------------------------
-                            # IMAGE + PRODUCT INFORMATION
-                            # ----------------------------------
+                            if (
+                                image_path
+                                and os.path.exists(image_path)
+                            ):
 
-                            c1, c2 = st.columns(
-                                [0.35, 1.65],
-                                gap="small"
-                            )
-
-                            # ==================================
-                            # IMAGE
-                            # ==================================
-
-                            with c1:
-                            
-                                image_name = row["masala_image"]
-
-                                if image_name:
-                                
-                                    image_path = os.path.join(
-                                        "images",
-                                        image_name
-                                    )
-
-                                    if os.path.exists(
-                                        image_path
-                                    ):
-
-                                        st.image(
-                                            image_path,
-                                            width=55
-                                        )
-
-                                    else:
-                                    
-                                        st.write("🛍️")
-
-                                else:
-                                
-                                    st.write("🛍️")
-
-                            # ==================================
-                            # PRODUCT NAME / RATE / STOCK
-                            # ==================================
-
-                            with c2:
-                            
-                                st.markdown(
-                                    f"""
-                                    <div style="
-                                        font-size:14px;
-                                        font-weight:600;
-                                        line-height:18px;
-                                        word-break:break-word;
-                                    ">
-                                        {product_name}
-                                    </div>
-
-                                    <div style="
-                                        font-size:13px;
-                                        margin-top:3px;
-                                    ">
-                                        ₹ {rate:.2f}
-                                    </div>
-
-                                    <div style="
-                                        font-size:12px;
-                                        margin-top:2px;
-                                    ">
-                                        Stock : {stock}
-                                    </div>
-                                    """,
-                                    unsafe_allow_html=True
-                                )
-
-                            # ==================================
-                            # OUT OF STOCK
-                            # ==================================
-
-                            if stock <= 0:
-                            
-                                st.error(
-                                    "❌ Out of Stock"
+                                st.image(
+                                    image_path,
+                                    width=70
                                 )
 
                             else:
                             
-                                # ==================================
+                                st.write("🛍️")
+
+                            # Product name BELOW image
+
+                            st.markdown(
+                                f"""
+                                <div style="
+                                    font-size:15px;
+                                    font-weight:600;
+                                    line-height:20px;
+                                    word-break:break-word;
+                                    margin-top:3px;
+                                ">
+                                    {product_name}
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+                            # Rate BELOW product name
+
+                            st.markdown(
+                                f"""
+                                <div style="
+                                    font-size:14px;
+                                    margin-top:3px;
+                                ">
+                                    ₹ {rate:.2f}
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+                            # Stock BELOW rate
+
+                            st.markdown(
+                                f"""
+                                <div style="
+                                    font-size:13px;
+                                    color:#555;
+                                    margin-top:2px;
+                                ">
+                                    Stock : {stock}
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+                        # ======================================
+                        # RIGHT SIDE
+                        # QTY + ADD BUTTON
+                        # ======================================
+
+                        with right:
+                        
+                            if stock <= 0:
+                            
+                                st.error("Out of Stock")
+
+                            else:
+                            
+                                # --------------------------------
                                 # PRODUCT FORM
-                                # ==================================
+                                # --------------------------------
 
                                 with st.form(
                                     key=f"product_form_{product_id}",
                                     clear_on_submit=True
                                 ):
 
-                                    # ----------------------------------
-                                    # QTY + AMOUNT
-                                    # ----------------------------------
-
-                                    q1, q2 = st.columns(
-                                        [0.2, 1.2],
-                                        gap="small"
+                                    qty = st.number_input(
+                                        "Qty",
+                                        min_value=1,
+                                        max_value=stock,
+                                        value=1,
+                                        step=1,
+                                        key=f"qty_{product_id}"
                                     )
 
-                                    # ==================================
-                                    # QUANTITY
-                                    # ==================================
-
-                                    with q1:
-                                    
-                                        qty = st.number_input(
-                                            "Qty",
-                                            min_value=1,
-                                            max_value=stock,
-                                            value=1,
-                                            step=1,
-                                            key=f"qty_{product_id}"
-                                        )
-
-                                    # ==================================
-                                    # AMOUNT
-                                    # ==================================
-
-                                    with q2:
-                                    
-                                        amount = qty * rate
-
-                                        st.markdown(
-                                            f"""
-                                            <div style="
-                                                font-size:13px;
-                                                margin-top:28px;
-                                            ">
-                                                <b>Amount :</b>
-                                                ₹ {amount:.2f}
-                                            </div>
-                                            """,
-                                            unsafe_allow_html=True
-                                        )
-
-                                    # ==================================
-                                    # ADD TO CART
-                                    # ==================================
-
-                                    add_product = st.form_submit_button(
-                                        "🛒 Add to Cart",
-                                        use_container_width=True
+                                    add = st.form_submit_button(
+                                        "🛒 Add",
+                                        use_container_width=False
                                     )
 
-                                # ==================================
-                                # ADD PRODUCT AFTER FORM SUBMIT
-                                # ==================================
-
-                                if add_product:
-                                
-                                    found = False
-
-                                    # ------------------------------
-                                    # CHECK EXISTING CART
-                                    # ------------------------------
-
-                                    for item in st.session_state.cart:
+                                    if add:
                                     
-                                        if item["id"] == product_id:
+                                        # ==========================
+                                        # CHECK EXISTING CART ITEM
+                                        # ==========================
+
+                                        found = False
+
+                                        for item in st.session_state.cart:
                                         
-                                            new_qty = (
-                                                item["qty"] + qty
+                                            if item["id"] == product_id:
+                                            
+                                                if (
+                                                    item["qty"] + qty
+                                                    > stock
+                                                ):
+
+                                                    st.error(
+                                                        f"Only {stock} available."
+                                                    )
+
+                                                else:
+                                                
+                                                    item["qty"] += qty
+
+                                                    st.success(
+                                                        f"{product_name} quantity updated."
+                                                    )
+
+                                                found = True
+                                                break
+                                            
+                                        # ==========================
+                                        # ADD NEW ITEM
+                                        # ==========================
+
+                                        if not found:
+                                        
+                                            st.session_state.cart.append(
+                                                {
+                                                    "id": product_id,
+                                                    "masala_name": product_name,
+                                                    "qty": qty,
+                                                    "rate": rate,
+                                                    "stock": stock
+                                                }
                                             )
 
-                                            # --------------------------
-                                            # STOCK CHECK
-                                            # --------------------------
+                                            st.success(
+                                                f"{product_name} added to cart."
+                            )
 
-                                            if new_qty > stock:
-                                            
-                                                st.error(
-                                                    f"Only {stock} "
-                                                    f"{product_name} "
-                                                    f"available."
-                                                )
 
-                                            else:
-                                            
-                                                item["qty"] = new_qty
+                                # =====================================
+                                # REFRESH PAGE
+                                # =====================================
 
-                                                st.success(
-                                                    f"{product_name} "
-                                                    f"quantity updated."
-                                                )
+                                # st.rerun()
 
-                                            found = True
 
-                                            break
-                                        
-                                    # ------------------------------
-                                    # NEW PRODUCT
-                                    # ------------------------------
 
-                                    if not found:
+
+    # if menu == "Order":
+    # if menu == "Order":
+    
+#             cursor = connection.cursor()
+    
+#             # ================= CUSTOMER =================
+    
+#             cursor.execute("""
+#                 SELECT shop_name
+#                 FROM customer
+#                 ORDER BY shop_name
+#             """)
+    
+#             cust_df = pd.DataFrame(
+#                 cursor.fetchall(),
+#                 columns=["shop_name"]
+#             )
+    
+#             if cust_df.empty:
+#                 st.warning("No Customers Found.")
+#                 st.stop()
+    
+#             # cust_name = st.selectbox(
+#             #     "Select Customer",
+#             #     cust_df["shop_name"]
+#             # )
+
+#             cust_name = st.selectbox(
+#     "Select Customer",
+#     cust_df["shop_name"],
+#     key="customer_select"
+# )
+
+# # Save customer in session
+#             st.session_state.customer_name = cust_name
+            
+
+#             if "selected_category" not in st.session_state:
+#                 st.session_state.selected_category = None
+
+#             if st.session_state.selected_category is None:
+            
+#                 cursor.execute("""
+#                 SELECT
+#                     category_id,
+#                     category_name,
+#                     category_image
+#                 FROM category_master
+#                 ORDER BY category_name
+#                 """)
+
+#                 category_df = pd.DataFrame(
+#                     cursor.fetchall(),
+#                     columns=[
+#                         "category_id",
+#                         "category_name",
+#                         "category_image"
+#                     ]
+#                 )
+
+#                 cols = st.columns(3)
+
+#                 for i, row in category_df.iterrows():
+                
+#                     col = cols[i % 3]
+
+#                     image_path = os.path.join(
+#                         "images",
+#                         row["category_image"]
+#                     )
+
+#                     with col:
+                    
+#                         st.image(image_path, width=120)
+
+#                         if st.button(
+#                             row["category_name"],
+#                             key=row["category_id"]
+#                         ):
+
+#                             st.session_state.selected_category = row["category_id"]
+
+#                             st.rerun()
+
+#             else:
+
+#                 category_id = st.session_state.selected_category
+
+#                 # ==========================================
+#                 # BACK BUTTON
+#                 # ==========================================
+
+#                 if st.button(
+#                     "⬅ Back",
+#                     use_container_width=True
+#                 ):
+
+#                     st.session_state.selected_category = None
+
+#                     st.rerun()
+
+#                 # ==========================================
+#                 # GET PRODUCTS
+#                 # ==========================================
+
+#                 cursor.execute(
+#                     """
+#                     SELECT
+#                         id,
+#                         masala_name,
+#                         rate,
+#                         inventory_qty,
+#                         masala_image
+#                     FROM masala_master
+#                     WHERE category_id = %s
+#                     AND status = 'Active'
+#                     ORDER BY masala_name
+#                     """,
+#                     (category_id,)
+#                 )
+
+#                 df = pd.DataFrame(
+#                     cursor.fetchall(),
+#                     columns=[
+#                         "id",
+#                         "masala_name",
+#                         "rate",
+#                         "inventory_qty",
+#                         "masala_image"
+#                     ]
+#                 )
+
+#                 # ==========================================
+#                 # CART INITIALIZE
+#                 # ==========================================
+
+#                 if "cart" not in st.session_state:
+                
+#                     st.session_state.cart = []
+
+#                 # ==========================================
+#                 # NO PRODUCT
+#                 # ==========================================
+
+#                 if df.empty:
+                
+#                     st.warning(
+#                         "No products available in this category."
+#                     )
+
+#                 else:
+                
+#                     st.subheader("🛍️ Products")
+
+#                     # ==========================================
+#                     # PRODUCT LOOP
+#                     # ==========================================
+
+#                     for _, row in df.iterrows():
+                    
+#                         product_id = int(row["id"])
+
+#                         product_name = row["masala_name"]
+
+#                         rate = float(row["rate"])
+
+#                         stock = int(row["inventory_qty"])
+
+#                         # ======================================
+#                         # PRODUCT CARD
+#                         # ======================================
+
+#                         with st.container(border=True):
+                        
+#                             # ----------------------------------
+#                             # IMAGE + PRODUCT INFORMATION
+#                             # ----------------------------------
+
+#                             c1, c2 = st.columns(
+#                                 [0.35, 1.65],
+#                                 gap="small"
+#                             )
+
+#                             # ==================================
+#                             # IMAGE
+#                             # ==================================
+
+#                             with c1:
+                            
+#                                 image_name = row["masala_image"]
+
+#                                 if image_name:
+                                
+#                                     image_path = os.path.join(
+#                                         "images",
+#                                         image_name
+#                                     )
+
+#                                     if os.path.exists(
+#                                         image_path
+#                                     ):
+
+#                                         st.image(
+#                                             image_path,
+#                                             width=55
+#                                         )
+
+#                                     else:
                                     
-                                        st.session_state.cart.append(
-                                            {
-                                                "id": product_id,
-                                                "masala_name": product_name,
-                                                "qty": qty,
-                                                "rate": rate,
-                                                "stock": stock
-                                            }
-                                        )
+#                                         st.write("🛍️")
 
-                                        st.success(
-                                            f"✅ {product_name} "
-                                            f"added to cart."
-                                        )
+#                                 else:
+                                
+#                                     st.write("🛍️")
+
+#                             # ==================================
+#                             # PRODUCT NAME / RATE / STOCK
+#                             # ==================================
+
+#                             with c2:
+                            
+#                                 st.markdown(
+#                                     f"""
+#                                     <div style="
+#                                         font-size:14px;
+#                                         font-weight:600;
+#                                         line-height:18px;
+#                                         word-break:break-word;
+#                                     ">
+#                                         {product_name}
+#                                     </div>
+
+#                                     <div style="
+#                                         font-size:13px;
+#                                         margin-top:3px;
+#                                     ">
+#                                         ₹ {rate:.2f}
+#                                     </div>
+
+#                                     <div style="
+#                                         font-size:12px;
+#                                         margin-top:2px;
+#                                     ">
+#                                         Stock : {stock}
+#                                     </div>
+#                                     """,
+#                                     unsafe_allow_html=True
+#                                 )
+
+#                             # ==================================
+#                             # OUT OF STOCK
+#                             # ==================================
+
+#                             if stock <= 0:
+                            
+#                                 st.error(
+#                                     "❌ Out of Stock"
+#                                 )
+
+#                             else:
+                            
+#                                 # ==================================
+#                                 # PRODUCT FORM
+#                                 # ==================================
+
+#                                 with st.form(
+#                                     key=f"product_form_{product_id}",
+#                                     clear_on_submit=True
+#                                 ):
+
+#                                     # ----------------------------------
+#                                     # QTY + AMOUNT
+#                                     # ----------------------------------
+
+#                                     q1, q2 = st.columns(
+#                                         [0.2, 1.2],
+#                                         gap="small"
+#                                     )
+
+#                                     # ==================================
+#                                     # QUANTITY
+#                                     # ==================================
+
+#                                     with q1:
+                                    
+#                                         qty = st.number_input(
+#                                             "Qty",
+#                                             min_value=1,
+#                                             max_value=stock,
+#                                             value=1,
+#                                             step=1,
+#                                             key=f"qty_{product_id}"
+#                                         )
+
+#                                     # ==================================
+#                                     # AMOUNT
+#                                     # ==================================
+
+#                                     # with q2:
+                                    
+#                                     #     amount = qty * rate
+
+#                                     #     st.markdown(
+#                                     #         f"""
+#                                     #         <div style="
+#                                     #             font-size:13px;
+#                                     #             margin-top:28px;
+#                                     #         ">
+#                                     #             <b>Amount :</b>
+#                                     #             ₹ {amount:.2f}
+#                                     #         </div>
+#                                     #         """,
+#                                     #         unsafe_allow_html=True
+#                                     #     )
+
+#                                     # ==================================
+#                                     # ADD TO CART
+#                                     # ==================================
+
+#                                     add_product = st.form_submit_button(
+#                                         "🛒 Add to Cart",
+#                                         use_container_width=True
+#                                     )
+
+#                                 # ==================================
+#                                 # ADD PRODUCT AFTER FORM SUBMIT
+#                                 # ==================================
+
+#                                 if add_product:
+                                
+#                                     found = False
+
+#                                     # ------------------------------
+#                                     # CHECK EXISTING CART
+#                                     # ------------------------------
+
+#                                     for item in st.session_state.cart:
+                                    
+#                                         if item["id"] == product_id:
+                                        
+#                                             new_qty = (
+#                                                 item["qty"] + qty
+#                                             )
+
+#                                             # --------------------------
+#                                             # STOCK CHECK
+#                                             # --------------------------
+
+#                                             if new_qty > stock:
+                                            
+#                                                 st.error(
+#                                                     f"Only {stock} "
+#                                                     f"{product_name} "
+#                                                     f"available."
+#                                                 )
+
+#                                             else:
+                                            
+#                                                 item["qty"] = new_qty
+
+#                                                 st.success(
+#                                                     f"{product_name} "
+#                                                     f"quantity updated."
+#                                                 )
+
+#                                             found = True
+
+#                                             break
+                                        
+#                                     # ------------------------------
+#                                     # NEW PRODUCT
+#                                     # ------------------------------
+
+#                                     if not found:
+                                    
+#                                         st.session_state.cart.append(
+#                                             {
+#                                                 "id": product_id,
+#                                                 "masala_name": product_name,
+#                                                 "qty": qty,
+#                                                 "rate": rate,
+#                                                 "stock": stock
+#                                             }
+#                                         )
+
+#                                         st.success(
+#                                             f"✅ {product_name} "
+#                                             f"added to cart."
+#                                         )
 
                         # ------------------------------
                         # RERUN
