@@ -407,9 +407,6 @@ div[data-testid="stFormSubmitButton"] > button {
             st.session_state.customer_name = cust_name
             
 
-
-
-
             if "selected_category" not in st.session_state:
                 st.session_state.selected_category = None
 
@@ -437,7 +434,7 @@ div[data-testid="stFormSubmitButton"] > button {
 
                 for i, row in category_df.iterrows():
                 
-                    col = cols[i % 3]
+                    col = cols[i % 9]
 
                     image_path = os.path.join(
                         "images",
