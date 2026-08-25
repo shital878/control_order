@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+# from order import details
 import psycopg2
 from datetime import datetime
 from db_config import DB_CONFIG
@@ -15,295 +16,7 @@ def order_details():
     st.set_page_config(page_title="Outlet Management System", layout="wide")
 
     # ---------------- CUSTOM CSS ----------------
-#     st.markdown("""
-# <style>
 
-# /* Main Background */
-
-# [data-testid="stAppViewContainer"]{
-# background: linear-gradient(to right,#d6eaf8,#f9ebea);
-# }
-
-# /* Center Title */
-
-# .main-title{
-# font-size:40px;
-# font-weight:bold;
-# text-align:center;
-# color:#154360;
-# margin-bottom:25px;
-# }
-
-# /* Card Design */
-
-# .card{
-# background:white;
-# padding:30px;
-# border-radius:12px;
-# box-shadow:0px 4px 12px rgba(0,0,0,0.15);
-# margin-bottom:20px;
-# }
-
-# /* Text Input */
-
-# div[data-baseweb="input"] > div{
-# background-color:#fdfefe;
-# border:2px solid #2E86C1;
-# border-radius:8px;
-# }
-
-# div[data-baseweb="input"] > div:focus-within{
-# border:2px solid #1B4F72;
-# background-color:#EBF5FB;
-# }
-
-# /* Labels */
-
-# label{
-# color:#154360 !important;
-# font-weight:600;
-# }
-
-#  /* Buttons */
-
-# .stButton > button,
-# div[data-testid="stFormSubmitButton"] > button{
-# background:#28B463;
-# color:white;
-# border-radius:8px;
-# height:42px;
-# width:200px;
-# font-weight:bold;
-# border:none;
-# }
-
-# /* Hover */
-
-# .stButton > button:hover,
-# div[data-testid="stFormSubmitButton"] > button:hover{
-# background:#1D8348;
-# color:white;
-# }
-
-# /* Sidebar */
-
-# section[data-testid="stSidebar"]{
-# background-color:#F8C471;
-# }
-
-# </style>
-# """, unsafe_allow_html=True)
-
-
-#     st.markdown("""
-#     <style>
-
-#     /* ==========================================
-#        MAIN BACKGROUND
-#        ========================================== */
-
-#     [data-testid="stAppViewContainer"] {
-#         background: linear-gradient(
-#             to right,
-#             #d6eaf8,
-#             #f9ebea
-#         );
-#     }
-
-
-#     /* ==========================================
-#        CENTER TITLE
-#        ========================================== */
-
-#     .main-title {
-#         font-size: 40px;
-#         font-weight: bold;
-#         text-align: center;
-#         color: #154360;
-#         margin-bottom: 25px;
-#     }
-
-
-#     /* ==========================================
-#        CARD DESIGN
-#        ========================================== */
-
-#     .card {
-#         background: white;
-#         padding: 30px;
-#         border-radius: 12px;
-#         box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
-#         margin-bottom: 20px;
-#     }
-
-
-#     /* ==========================================
-#        TEXT INPUT
-#        ========================================== */
-
-#     div[data-baseweb="input"] > div {
-#         background-color: #fdfefe;
-#         border: 2px solid #2E86C1;
-#         border-radius: 8px;
-#     }
-
-#     div[data-baseweb="input"] > div:focus-within {
-#         border: 2px solid #1B4F72;
-#         background-color: #EBF5FB;
-#     }
-
-
-#     /* ==========================================
-#        LABELS
-#        ========================================== */
-
-#     label {
-#         color: #154360 !important;
-#         font-weight: 600;
-#     }
-
-
-#     /* ==========================================
-#        BUTTONS
-#        ========================================== */
-
-#     # .stButton > button,
-#     # div[data-testid="stFormSubmitButton"] > button {
-#     #     background: #28B463;
-#     #     color: white;
-#     #     border-radius: 8px;
-#     #     height: 42px;
-#     #     width: 100px;
-#     #     font-weight: bold;
-#     #     border: none;
-#     # }
-#     .stButton > button,
-# div[data-testid="stFormSubmitButton"] > button {
-#     background:#28B463;
-#     color:white;
-#     border-radius:8px;
-#     height:38px;
-#     width:150px;
-#     font-weight:bold;
-#     border:none;
-# }
-
-#     /* ==========================================
-#        BUTTON HOVER
-#        ========================================== */
-
-#     .stButton > button:hover,
-#     div[data-testid="stFormSubmitButton"] > button:hover {
-#         background: #1D8348;
-#         color: white;
-#     }
-
-
-#     /* ==========================================
-#        SIDEBAR
-#        ========================================== */
-
-#     section[data-testid="stSidebar"] {
-#         background-color: #F8C471;
-#     }
-
-
-#     /* ==========================================
-#        MOBILE RESPONSIVE DESIGN
-#        ========================================== */
-
-#     @media (max-width: 768px) {
-
-#         /* Page spacing */
-#         .block-container {
-#             padding-left: 10px !important;
-#             padding-right: 10px !important;
-#             padding-top: 15px !important;
-#         }
-
-#         /* Main title */
-#         .main-title {
-#             font-size: 28px !important;
-#             margin-bottom: 15px !important;
-#         }
-
-#         /* Headings */
-#         h1 {
-#             font-size: 28px !important;
-#         }
-
-#         h2 {
-#             font-size: 23px !important;
-#         }
-
-#         h3 {
-#             font-size: 20px !important;
-#         }
-
-#         /* ======================================
-#            KEEP CART COLUMNS HORIZONTAL
-#            ====================================== */
-
-#         div[data-testid="stHorizontalBlock"] {
-#             flex-wrap: nowrap !important;
-#             gap: 8px !important;
-#             align-items: center !important;
-#         }
-
-#         div[data-testid="column"] {
-#             min-width: 0 !important;
-#             padding: 0 !important;
-#         }
-
-#         /* ======================================
-#            NUMBER INPUT
-#            ====================================== */
-
-#         div[data-testid="stNumberInput"] {
-#             width: 100% !important;
-#         }
-
-#         div[data-testid="stNumberInput"] input {
-#             font-size: 14px !important;
-#             padding-left: 5px !important;
-#             padding-right: 5px !important;
-#         }
-
-#         /* ======================================
-#            CART TEXT
-#            ====================================== */
-
-#         div[data-testid="column"] p {
-#             font-size: 13px !important;
-#             word-break: break-word !important;
-#         }
-
-#         /* ======================================
-#            BUTTONS
-#            ====================================== */
-
-#         .stButton > button,
-#     div[data-testid="stFormSubmitButton"] > button {
-#         width:100% !important;
-#         height:36px !important;
-#         font-size:13px !important;
-#     }
-
-
-        
-
-#         /* ======================================
-#            CUSTOMER MESSAGE
-#            ====================================== */
-
-#         div[data-testid="stAlert"] {
-#             font-size: 14px !important;
-#         }
-
-#     }
-
-#     </style>
-#     """, unsafe_allow_html=True)
 
     st.markdown("""
 <style>
@@ -601,9 +314,9 @@ section[data-testid="stSidebar"] {
     connection = psycopg2.connect(**DB_CONFIG)
     cursor = connection.cursor()
 
-    menu = st.sidebar.radio("Order", ["Order","Update","Delivery","Bill","Cart"])
+    menu = st.radio("Order", ["Order","Update","Delivery","Bill","Cart"],horizontal=True)
 
-
+  
     # ---------------- SESSION ----------------
 
     if "cart" not in st.session_state:
@@ -616,31 +329,6 @@ section[data-testid="stSidebar"] {
         st.session_state.selected_category = None
 
 
-
-    # # ---------------- Session ----------------
-    # if "cart" not in st.session_state:
-    #     st.session_state.cart = []
-    
-    # if "selected_category" not in st.session_state:
-    #     st.session_state.selected_category = None
-    
-    # if "customer_name" not in st.session_state:
-    #     st.session_state.customer_name = ""
-    
-    # # ---------------- Cart Count ----------------
-    # cart_count = len(st.session_state.cart)
-    
-    # # ---------------- Sidebar Menu ----------------
-    # menu = st.sidebar.radio(
-    #     "Order",
-    #     (
-    #         "Order",
-    #         "Update",
-    #         "Delivery",
-    #         "Bill",
-    #         "cart"
-    #     )
-    # )
 
     query = "SELECT * FROM masala_master"
     df = pd.read_sql(query, connection)
@@ -1056,1244 +744,1101 @@ section[data-testid="stSidebar"] {
                             )
 
 
-                                # =====================================
-                                # REFRESH PAGE
-                                # =====================================
-
-                                # st.rerun()
-
-
-
-
-    # if menu == "Order":
-    # if menu == "Order":
-    
-#             cursor = connection.cursor()
-    
-#             # ================= CUSTOMER =================
-    
-#             cursor.execute("""
-#                 SELECT shop_name
-#                 FROM customer
-#                 ORDER BY shop_name
-#             """)
-    
-#             cust_df = pd.DataFrame(
-#                 cursor.fetchall(),
-#                 columns=["shop_name"]
-#             )
-    
-#             if cust_df.empty:
-#                 st.warning("No Customers Found.")
-#                 st.stop()
-    
-#             # cust_name = st.selectbox(
-#             #     "Select Customer",
-#             #     cust_df["shop_name"]
-#             # )
-
-#             cust_name = st.selectbox(
-#     "Select Customer",
-#     cust_df["shop_name"],
-#     key="customer_select"
-# )
-
-# # Save customer in session
-#             st.session_state.customer_name = cust_name
-            
-
-#             if "selected_category" not in st.session_state:
-#                 st.session_state.selected_category = None
-
-#             if st.session_state.selected_category is None:
-            
-#                 cursor.execute("""
-#                 SELECT
-#                     category_id,
-#                     category_name,
-#                     category_image
-#                 FROM category_master
-#                 ORDER BY category_name
-#                 """)
-
-#                 category_df = pd.DataFrame(
-#                     cursor.fetchall(),
-#                     columns=[
-#                         "category_id",
-#                         "category_name",
-#                         "category_image"
-#                     ]
-#                 )
-
-#                 cols = st.columns(3)
-
-#                 for i, row in category_df.iterrows():
-                
-#                     col = cols[i % 3]
-
-#                     image_path = os.path.join(
-#                         "images",
-#                         row["category_image"]
-#                     )
-
-#                     with col:
-                    
-#                         st.image(image_path, width=120)
-
-#                         if st.button(
-#                             row["category_name"],
-#                             key=row["category_id"]
-#                         ):
-
-#                             st.session_state.selected_category = row["category_id"]
-
-#                             st.rerun()
-
-#             else:
-
-#                 category_id = st.session_state.selected_category
-
-#                 # ==========================================
-#                 # BACK BUTTON
-#                 # ==========================================
-
-#                 if st.button(
-#                     "⬅ Back",
-#                     use_container_width=True
-#                 ):
-
-#                     st.session_state.selected_category = None
-
-#                     st.rerun()
-
-#                 # ==========================================
-#                 # GET PRODUCTS
-#                 # ==========================================
-
-#                 cursor.execute(
-#                     """
-#                     SELECT
-#                         id,
-#                         masala_name,
-#                         rate,
-#                         inventory_qty,
-#                         masala_image
-#                     FROM masala_master
-#                     WHERE category_id = %s
-#                     AND status = 'Active'
-#                     ORDER BY masala_name
-#                     """,
-#                     (category_id,)
-#                 )
-
-#                 df = pd.DataFrame(
-#                     cursor.fetchall(),
-#                     columns=[
-#                         "id",
-#                         "masala_name",
-#                         "rate",
-#                         "inventory_qty",
-#                         "masala_image"
-#                     ]
-#                 )
-
-#                 # ==========================================
-#                 # CART INITIALIZE
-#                 # ==========================================
-
-#                 if "cart" not in st.session_state:
-                
-#                     st.session_state.cart = []
-
-#                 # ==========================================
-#                 # NO PRODUCT
-#                 # ==========================================
-
-#                 if df.empty:
-                
-#                     st.warning(
-#                         "No products available in this category."
-#                     )
-
-#                 else:
-                
-#                     st.subheader("🛍️ Products")
-
-#                     # ==========================================
-#                     # PRODUCT LOOP
-#                     # ==========================================
-
-#                     for _, row in df.iterrows():
-                    
-#                         product_id = int(row["id"])
-
-#                         product_name = row["masala_name"]
-
-#                         rate = float(row["rate"])
-
-#                         stock = int(row["inventory_qty"])
-
-#                         # ======================================
-#                         # PRODUCT CARD
-#                         # ======================================
-
-#                         with st.container(border=True):
-                        
-#                             # ----------------------------------
-#                             # IMAGE + PRODUCT INFORMATION
-#                             # ----------------------------------
-
-#                             c1, c2 = st.columns(
-#                                 [0.35, 1.65],
-#                                 gap="small"
-#                             )
-
-#                             # ==================================
-#                             # IMAGE
-#                             # ==================================
-
-#                             with c1:
-                            
-#                                 image_name = row["masala_image"]
-
-#                                 if image_name:
-                                
-#                                     image_path = os.path.join(
-#                                         "images",
-#                                         image_name
-#                                     )
-
-#                                     if os.path.exists(
-#                                         image_path
-#                                     ):
-
-#                                         st.image(
-#                                             image_path,
-#                                             width=55
-#                                         )
-
-#                                     else:
-                                    
-#                                         st.write("🛍️")
-
-#                                 else:
-                                
-#                                     st.write("🛍️")
-
-#                             # ==================================
-#                             # PRODUCT NAME / RATE / STOCK
-#                             # ==================================
-
-#                             with c2:
-                            
-#                                 st.markdown(
-#                                     f"""
-#                                     <div style="
-#                                         font-size:14px;
-#                                         font-weight:600;
-#                                         line-height:18px;
-#                                         word-break:break-word;
-#                                     ">
-#                                         {product_name}
-#                                     </div>
-
-#                                     <div style="
-#                                         font-size:13px;
-#                                         margin-top:3px;
-#                                     ">
-#                                         ₹ {rate:.2f}
-#                                     </div>
-
-#                                     <div style="
-#                                         font-size:12px;
-#                                         margin-top:2px;
-#                                     ">
-#                                         Stock : {stock}
-#                                     </div>
-#                                     """,
-#                                     unsafe_allow_html=True
-#                                 )
-
-#                             # ==================================
-#                             # OUT OF STOCK
-#                             # ==================================
-
-#                             if stock <= 0:
-                            
-#                                 st.error(
-#                                     "❌ Out of Stock"
-#                                 )
-
-#                             else:
-                            
-#                                 # ==================================
-#                                 # PRODUCT FORM
-#                                 # ==================================
-
-#                                 with st.form(
-#                                     key=f"product_form_{product_id}",
-#                                     clear_on_submit=True
-#                                 ):
-
-#                                     # ----------------------------------
-#                                     # QTY + AMOUNT
-#                                     # ----------------------------------
-
-#                                     q1, q2 = st.columns(
-#                                         [0.2, 1.2],
-#                                         gap="small"
-#                                     )
-
-#                                     # ==================================
-#                                     # QUANTITY
-#                                     # ==================================
-
-#                                     with q1:
-                                    
-#                                         qty = st.number_input(
-#                                             "Qty",
-#                                             min_value=1,
-#                                             max_value=stock,
-#                                             value=1,
-#                                             step=1,
-#                                             key=f"qty_{product_id}"
-#                                         )
-
-#                                     # ==================================
-#                                     # AMOUNT
-#                                     # ==================================
-
-#                                     # with q2:
-                                    
-#                                     #     amount = qty * rate
-
-#                                     #     st.markdown(
-#                                     #         f"""
-#                                     #         <div style="
-#                                     #             font-size:13px;
-#                                     #             margin-top:28px;
-#                                     #         ">
-#                                     #             <b>Amount :</b>
-#                                     #             ₹ {amount:.2f}
-#                                     #         </div>
-#                                     #         """,
-#                                     #         unsafe_allow_html=True
-#                                     #     )
-
-#                                     # ==================================
-#                                     # ADD TO CART
-#                                     # ==================================
-
-#                                     add_product = st.form_submit_button(
-#                                         "🛒 Add to Cart",
-#                                         use_container_width=True
-#                                     )
-
-#                                 # ==================================
-#                                 # ADD PRODUCT AFTER FORM SUBMIT
-#                                 # ==================================
-
-#                                 if add_product:
-                                
-#                                     found = False
-
-#                                     # ------------------------------
-#                                     # CHECK EXISTING CART
-#                                     # ------------------------------
-
-#                                     for item in st.session_state.cart:
-                                    
-#                                         if item["id"] == product_id:
-                                        
-#                                             new_qty = (
-#                                                 item["qty"] + qty
-#                                             )
-
-#                                             # --------------------------
-#                                             # STOCK CHECK
-#                                             # --------------------------
-
-#                                             if new_qty > stock:
-                                            
-#                                                 st.error(
-#                                                     f"Only {stock} "
-#                                                     f"{product_name} "
-#                                                     f"available."
-#                                                 )
-
-#                                             else:
-                                            
-#                                                 item["qty"] = new_qty
-
-#                                                 st.success(
-#                                                     f"{product_name} "
-#                                                     f"quantity updated."
-#                                                 )
-
-#                                             found = True
-
-#                                             break
-                                        
-#                                     # ------------------------------
-#                                     # NEW PRODUCT
-#                                     # ------------------------------
-
-#                                     if not found:
-                                    
-#                                         st.session_state.cart.append(
-#                                             {
-#                                                 "id": product_id,
-#                                                 "masala_name": product_name,
-#                                                 "qty": qty,
-#                                                 "rate": rate,
-#                                                 "stock": stock
-#                                             }
-#                                         )
-
-#                                         st.success(
-#                                             f"✅ {product_name} "
-#                                             f"added to cart."
-#                                         )
-
-                        # ------------------------------
-                        # RERUN
-                        # ------------------------------
-
-                        # st.rerun()
-
-
-            
-            # else:
-            
-            #     category_id = st.session_state.selected_category
-
-            #     if st.button("⬅ Back"):
-                
-            #         st.session_state.selected_category = None
-            #         st.rerun()
-
-            #     cursor.execute("""
-            #         SELECT
-            #             id,
-            #             masala_name,
-            #             rate,
-            #             inventory_qty,
-            #             masala_image
-            #         FROM masala_master
-            #         WHERE category_id=%s
-            #         ORDER BY masala_name
-            #     """, (category_id,))
-
-            #     df = pd.DataFrame(
-            #         cursor.fetchall(),
-            #         columns=[
-            #             "id",
-            #             "masala_name",
-            #             "rate",
-            #             "inventory_qty",
-            #             "masala_image"
-            #         ]
-            #     )
-
-            #     # ==========================================
-            #     # NEW COMPACT PRODUCT DISPLAY
-            #     # ==========================================
-
-            #     for _, row in df.iterrows():
-                
-            #         stock = int(row["inventory_qty"])
-
-            #         c1, c2, c3 = st.columns(
-            #             [0.35, .8, 0.25],
-            #             gap="small"
-            #         )
-
-            #         with c1:
-                    
-            #             if row["masala_image"]:
-                        
-            #                 image_path = os.path.join(
-            #                     "images",
-            #                     row["masala_image"]
-            #                 )
-
-            #                 if os.path.exists(image_path):
-                            
-            #                     st.image(
-            #                         image_path,
-            #                         width=50
-            #                     )
-
-            #         with c2:
-                    
-            #             st.markdown(
-            #                 f"""
-            #                 <div style="
-            #                     font-size:14px;
-            #                     font-weight:600;
-            #                     line-height:18px;
-            #                     word-break:break-word;
-            #                     margin-top:5px;
-            #                 ">
-            #                     {row["masala_name"]}
-            #                 </div>
-
-            #                 <div style="
-            #                     font-size:13px;
-            #                     margin-top:3px;
-            #                 ">
-            #                     ₹ {row["rate"]}
-            #                 </div>
-            #                 """,
-            #                 unsafe_allow_html=True
-            #             )
-            #     with c3:
-
-            #         if stock <= 0:
-                    
-            #             st.caption("Out")
-
-            #         else:
-                    
-            #             st.caption("Qty")
-
-            #             qty = st.number_input(
-            #                 "",
-            #                 min_value=0,
-            #                 max_value=stock,
-            #                 step=1,
-            #                 value=0,
-            #                 key=f"qty_{row['id']}",
-            #                 label_visibility="collapsed"
-            #             )
-
-            #             if st.button(
-            #                 "Add",
-            #                 key=f"add_{row['id']}",
-            #                 use_container_width=True
-            #             ):
-
-            #                 if qty <= 0:
-                            
-            #                     st.warning("Enter Qty")
-
-            #                 else:
-                            
-            #                     found = False
-
-            #                     for item in st.session_state.cart:
-                                
-            #                         if item["id"] == row["id"]:
-                                    
-            #                             if item["qty"] + qty > stock:
-                                        
-            #                                 st.error(
-            #                                     f"Only {stock} available."
-            #                                 )
-
-            #                             else:
-                                        
-            #                                 item["qty"] += qty
-
-            #                                 st.success(
-            #                                     "Quantity updated"
-            #                                 )
-
-            #                             found = True
-            #                             break
-                                    
-            #                     if not found:
-                                
-            #                         st.session_state.cart.append({
-            #                             "id": int(row["id"]),
-            #                             "masala_name": row["masala_name"],
-            #                             "qty": qty,
-            #                             "rate": float(row["rate"]),
-            #                             "stock": stock
-            #                         })
-
-            #                         st.success(
-            #                             f"{row['masala_name']} added"
-            #                         )
-
-
-
-
-
-
-                    # with c3:
-                    
-                    #     if stock <= 0:
-                        
-                    #         st.caption("Out")
-
-                    #     else:
-                        
-                    #         qty = st.number_input(
-                    #             "Qty",
-                    #             min_value=0,
-                    #             max_value=stock,
-                    #             step=1,
-                    #             key=f"qty_{row['id']}"
-                    #         )
-
-                    #         if st.button(
-                    #             "Add",
-                    #             key=f"add_{row['id']}",
-                    #             use_container_width=True
-                    #         ):
-
-                    #             if qty <= 0:
-                                
-                    #                 st.warning("Enter Qty")
-
-                    #             else:
-                                
-                    #                 found = False
-
-                    #                 for item in st.session_state.cart:
-                                    
-                    #                     if item["id"] == row["id"]:
-                                        
-                    #                         if item["qty"] + qty > stock:
-                                            
-                    #                             st.error(
-                    #                                 f"Only {stock} available."
-                    #                             )
-
-                    #                         else:
-                                            
-                    #                             item["qty"] += qty
-
-                    #                             st.success(
-                    #                                 "Quantity updated"
-                    #                             )
-
-                    #                         found = True
-                    #                         break
-                                        
-                    #                 if not found:
-                                    
-                    #                     st.session_state.cart.append({
-                    #                         "id": int(row["id"]),
-                    #                         "masala_name": row["masala_name"],
-                    #                         "qty": qty,
-                    #                         "rate": float(row["rate"]),
-                    #                         "stock": stock
-                    #                     })
-
-                    #                     st.success(
-                    #                         f"{row['masala_name']} added"
-                    #                     )
-
                     st.divider()
 
-#             else:
-            
-#                 category_id = st.session_state.selected_category
+    elif menu == "Update":
+    
+            st.title("Update Masala Order")
+    
+            cust_name = st.selectbox("Select Customer", cust_df["shop_name"])
+    
+            # cust_name = st.text_input("Customer Name")
+            masala_name = st.selectbox("Masala Name", df["masala_name"])
+    
+            col1, col2 = st.columns(2)
+    
+            new_qty = col1.number_input("New Quantity", min_value=1)
+            new_rate = col2.number_input("New Rate", min_value=1)
+    
+            if st.button("Update Order"):
+    
+                new_amount = new_qty * new_rate
+    
+                cursor = connection.cursor()
+    
+                update_query = """
+                UPDATE masala_order
+                SET qty = %s,
+                    rate = %s,
+                    amount = %s
+                WHERE cust_name = %s
+                AND masala_name = %s
+                AND business_date = CURRENT_DATE
+                """
+    
+                cursor.execute(update_query,
+                               (new_qty, new_rate, new_amount, cust_name, masala_name))
+    
+                connection.commit()
+    
+                st.success("Order Updated Successfully")
 
-#                 if st.button("⬅ Back"):
+    # ******************************delivery****************
+
+
+    elif menu == "Delivery":
+
+        # ---------------- PAGE TITLE ----------------
+        st.subheader("🚚 Delivery Update")
+
+        # ---------------- FETCH PENDING CUSTOMERS ----------------
+        pending_cust_query = """
+            SELECT DISTINCT cust_name
+            FROM masala_order
+            WHERE status = 'Pending'
+            ORDER BY cust_name
+        """
+
+        pending_df = pd.read_sql(pending_cust_query, connection)
+
+        # ---------------- NO DATA CASE ----------------
+        if pending_df.empty:
+            st.warning("No pending customers found")
+            st.stop()
+
+        # ---------------- CUSTOMER SELECTION ----------------
+        cust_name = st.selectbox(
+            "Select Customer",
+            pending_df["cust_name"],
+            index=0
+        )
+
+        # ---------------- FETCH CUSTOMER ITEMS ----------------
+        items_query = """
+            SELECT seq, masala_name, qty, rate
+            FROM masala_order
+            WHERE status = 'Pending'
+            AND cust_name = %s
+            ORDER BY seq
+        """
+
+        items_df = pd.read_sql(items_query, connection, params=(cust_name,))
+
+        # ---------------- NO ITEMS ----------------
+        if items_df.empty:
+            st.warning("No pending items for selected customer")
+            st.stop()
+
+        st.markdown("### 📦 Order Details")
+
+        # ---------------- HEADER ROW ----------------
+        h1, h2, h3, h4 = st.columns([3, 1.5, 1.5, 2])
+        h1.markdown("**Masala Name**")
+        h2.markdown("**Ordered Qty**")
+        h3.markdown("**Rate**")
+        h4.markdown("**Delivered Qty**")
+
+        # ---------------- STORE DATA ----------------
+        delivery_data = []
+
+        # ---------------- LOOP ITEMS ----------------
+        for _, row in items_df.iterrows():
+
+            seq = int(row["seq"])
+            masala_name = row["masala_name"]
+            ordered_qty = int(row["qty"])
+            rate = float(row["rate"])
+
+            col1, col2, col3, col4 = st.columns([3, 1.5, 1.5, 2])
+
+            col1.write(masala_name)
+            col2.write(ordered_qty)
+            col3.write(f"₹ {rate:.2f}")
+
+            # delivered_qty = col4.number_input(
+            #     label="",
+            #     min_value=0,
+            #     max_value=ordered_qty,
+            #     value=ordered_qty,
+            #     step=1,
+            #     key=f"del_qty_{seq}"
+            # )
+
+            delivered_qty = col4.number_input(
+    "Delivered Qty",
+    min_value=0,
+    max_value=ordered_qty,
+    value=ordered_qty,
+    step=1,
+    key=f"del_qty_{seq}",
+    label_visibility="collapsed"
+)
+
+            delivery_data.append({
+                "seq": seq,
+                "name": masala_name,
+                "ordered": ordered_qty,
+                "delivered": delivered_qty,
+                "rate": rate
+            })
+
+        # ---------------- BUTTONS ----------------
+        st.markdown("---")
+        btn1, btn2 = st.columns(2)
+
+        # ================= UPDATE DELIVERY =================
+        with btn1:
+            if st.button("✅ Update Delivery", use_container_width=True):
+
+                cursor = connection.cursor()
+
+                for item in delivery_data:
+
+                    seq = item["seq"]
+                    masala_name = item["name"]
+                    ordered_qty = item["ordered"]
+                    delivered_qty = item["delivered"]
+                    rate = item["rate"]
+
+                    # -------- VALIDATION --------
+                    if delivered_qty < 0:
+                        st.error(f"{masala_name}: Invalid quantity")
+                        continue
+
+                    if delivered_qty > ordered_qty:
+                        st.error(f"{masala_name}: Delivered > Ordered not allowed")
+                        continue
+
+                    # -------- STATUS LOGIC --------
+                    if delivered_qty == ordered_qty:
+                        status = "Delivered"
+                    elif delivered_qty == 0:
+                        status = "Pending"
+                    else:
+                        status = "Partial"
+
+                    amount_del = delivered_qty * rate
+
+                    # -------- UPDATE QUERY --------
+                    cursor.execute("""
+                        UPDATE masala_order
+                        SET qty_del = %s,
+                            amount_del = %s,
+                            business_date_del = CURRENT_DATE,
+                            order_time_del = CURRENT_TIMESTAMP,
+                            status = %s
+                        WHERE seq = %s
+                    """, (
+                        delivered_qty,
+                        amount_del,
+                        status,
+                        seq
+                    ))
+
+                connection.commit()
+                cursor.close()
+
+                st.success(f"Delivery updated successfully for {cust_name} ✅")
+
+                                # ===== FETCH UPDATED DATA FROM DB =====
+
+                bill_query = """
+                    SELECT
+                        masala_name,
+                        qty_del,
+                        rate
+                    FROM masala_order
+                    WHERE cust_name = %s
+                    AND status IN ('Delivered','Partial')
+                    AND business_date_del = CURRENT_DATE
+                """
                 
-#                     st.session_state.selected_category = None
-
-#                     st.rerun()
-
-#                 cursor.execute("""
-#                 SELECT
-#                     id,
-#                     masala_name,
-#                     rate,
-#                     inventory_qty,
-#                     masala_image
-#                 FROM masala_master
-#                 WHERE category_id=%s
-#                 ORDER BY masala_name
-#                 """,(category_id,))
-
-#                 df = pd.DataFrame(
-#                     cursor.fetchall(),
-#                     columns=[
-#                         "id",
-#                         "masala_name",
-#                         "rate",
-#                         "inventory_qty",
-#                         "masala_image"
-#                     ]
-#                 )
-
-#                 for _, row in df.iterrows():
+                bill_df = pd.read_sql(
+                    bill_query,
+                    connection,
+                    params=(cust_name,)
+                )
                 
-#                     c1,c2,c3 = st.columns([0.7,0.6,0.4])
-
-#                     with c1:
-                    
-#                         st.image(
-#                             os.path.join(
-#                                 "images",
-#                                 row["masala_image"]
-#                             ),
-#                             width=90
-#                         )
-
-#                     with c2:
-                    
-#                         st.write("###",row["masala_name"])
-#                         st.write("₹",row["rate"])
-#                         st.write("Stock :",row["inventory_qty"])
-
-#             # with c3:
-
-#             #     qty = st.number_input(
-#             #         "",
-#             #         min_value=0,
-#             #         key=f"qty_{row['id']}"
-#             #     )
-
-#         # *********************************************************************
-#             # if "cart" not in st.session_state:
-#             #     st.session_state.cart = []
-
-
-#             # with c3:
-
-#             #     qty = st.number_input(
-#             #         "Qty",
-#             #         min_value=0,
-#             #         step=1,
-#             #         key=f"qty_{row['id']}"
-#             #     )
-
-#             #     if st.button("Add", key=f"add_{row['id']}"):
+                if bill_df.empty:
                 
-#             #         if qty > 0:
+                    st.warning("No delivered items found for billing")
+                
+                    st.stop()
+                
+                # =====================================================
+                # ================= PREPARE TABLE DATA =================
+                # =====================================================
+                
+                total = 0
+                
+                table_data = [[
+                    "Masala Name",
+                    "Quantity",
+                    "Rate",
+                    "Amount"
+                ]]
+                
+                for _, row in bill_df.iterrows():
+                
+                    amount = row["qty_del"] * row["rate"]
+                
+                    total += amount
+                
+                    table_data.append([
+                        row["masala_name"],
+                        int(row["qty_del"]),
+                        f"₹ {row['rate']:.2f}",
+                        f"₹ {amount:.2f}"
+                    ])
+                
+                # ===== TOTAL ROW =====
+                
+                table_data.append([
+                    "",
+                    "",
+                    "TOTAL",
+                    f"₹ {total:.2f}"
+                ])
+                
+                # =====================================================
+                # ================= GENERATE PDF ======================
+                # =====================================================
+                
+                from io import BytesIO
+                
+                from reportlab.platypus import (
+                    SimpleDocTemplate,
+                    Table,
+                    TableStyle,
+                    Paragraph,
+                    Spacer
+                )
+                
+                from reportlab.lib import colors
+                from reportlab.lib.styles import getSampleStyleSheet
+                from reportlab.lib.pagesizes import A4
+                from reportlab.lib.units import inch
+                
+                buffer = BytesIO()
+                
+                # =====================================================
+                # ================= PDF DOCUMENT ======================
+                # =====================================================
+                
+                doc = SimpleDocTemplate(
+                    buffer,
+                    pagesize=A4,
+                    rightMargin=30,
+                    leftMargin=30,
+                    topMargin=30,
+                    bottomMargin=20
+                )
+                
+                elements = []
+                
+                styles = getSampleStyleSheet()
+                
+                # =====================================================
+                # ================= TITLE =============================
+                # =====================================================
+                
+                title = Paragraph(
+                    "<font size=20><b>MASALA DELIVERY BILL</b></font>",
+                    styles['Title']
+                )
+                
+                elements.append(title)
+                
+                elements.append(Spacer(1, 20))
+                
+                # =====================================================
+                # ================= CUSTOMER INFO =====================
+                # =====================================================
+                
+                customer_info = f"""
+                <font size=12>
+                <b>Customer:</b> {cust_name}<br/>
+                <b>Date:</b> {datetime.now().strftime('%d-%m-%Y %H:%M')}
+                </font>
+                """
+                
+                elements.append(
+                    Paragraph(
+                        customer_info,
+                        styles['Normal']
+                    )
+                )
+                
+                elements.append(Spacer(1, 20))
+                
+                # =====================================================
+                # ================= FULL WIDTH TABLE ==================
+                # =====================================================
+                
+                table = Table(
+                
+                    table_data,
+                
+                    colWidths=[
                     
-#             #             # Prevent duplicate product in cart
-#             #             found = False
-
-#             #             for item in st.session_state.cart:
-                        
-#             #                 if item["id"] == row["id"]:
-#             #                     item["qty"] += qty
-#             #                     found = True
-#             #                     break
-                            
-#             #             if not found:
-                        
-#             #                 st.session_state.cart.append({
-                            
-#             #                     "id": row["id"],
-#             #                     "masala_name": row["masala_name"],
-#             #                     "qty": qty,
-#             #                     "rate": row["rate"],
-#             #                     "stock": row["inventory_qty"]
-
-#             #                 })
-
-#             #             st.success(f"{row['masala_name']} added to cart")
-# # ************************************************************************************************
-#                     with c3:
-                    
-#                         stock = int(row["inventory_qty"])
-
-#                         # Show stock
-#                         st.write(f"Stock : {stock}")
-
-#                         if stock <= 0:
-                        
-#                             st.error("Out of Stock")
-
-#                         else:
-                        
-#                             qty = st.number_input(
-#                                 "Qty",
-#                                 min_value=0,
-#                                 max_value=stock,      # Cannot order more than available stock
-#                                 step=1,
-#                                 key=f"qty_{row['id']}"
-#                             )
-
-#                             if st.button("Add", key=f"add_{row['id']}"):
-                            
-#                                 if qty == 0:
-#                                     st.warning("Please enter quantity greater than 0.")
-
-#                                 else:
-                                
-#                                     found = False
-
-#                                     for item in st.session_state.cart:
-                                    
-#                                         if item["id"] == row["id"]:
-                                        
-#                                             # Prevent exceeding stock
-#                                             if item["qty"] + qty > stock:
-#                                                 st.error(f"Only {stock} items available.")
-#                                             else:
-#                                                 item["qty"] += qty
-#                                                 st.success(f"{row['masala_name']} quantity updated.")
-
-#                                             found = True
-#                                             break
-                                        
-#                                     if not found:
-                                    
-#                                         # st.session_state.cart.append({
-#                                         #     "id": row["id"],
-#                                         #     "masala_name": row["masala_name"],
-#                                         #     "qty": qty,
-#                                         #     "rate": row["rate"],
-#                                         #     "stock": stock
-#                                         # })
-
-#                                         st.session_state.customer_name = cust_name
-
-#                                         st.session_state.cart.append({
-#                                             "id": row["id"],
-#                                             "masala_name": row["masala_name"],
-#                                             "qty": qty,
-#                                             "rate": row["rate"],
-#                                             "stock": stock
-#                                         })
-
-#                                         st.success(f"{row['masala_name']} added to cart.")
-
-
-       # ==========================================
-# SHOPPING CART
-# ==========================================
-
-    # elif menu == "Cart":
-
-    #     st.title("🛒 Shopping Cart")
-
-    #     # ==========================================
-    #     # CHECK CART
-    #     # ==========================================
-
-    #     if len(st.session_state.cart) == 0:
-
-    #         st.info("Cart is Empty.")
-
-    #     else:
-
-    #         # ==========================================
-    #         # CUSTOMER
-    #         # ==========================================
-
-    #         customer = st.session_state.get(
-    #             "customer_name",
-    #             ""
-    #         )
-
-    #         st.info(
-    #             f"Customer : {customer}"
-    #         )
-
-    #         # ==========================================
-    #         # GRAND TOTAL
-    #         # ==========================================
-
-    #         grand_total = 0
-
-    #         # Store index of item to remove
-    #         remove_index = None
-
-    #         # ==========================================
-    #         # CART ITEMS
-    #         # ==========================================
-
-    #         for i, item in enumerate(
-    #             st.session_state.cart
-    #         ):
-
-    #             # ======================================
-    #             # PRODUCT CARD
-    #             # ======================================
-
-    #             with st.container(border=True):
-
-    #                 # ----------------------------------
-    #                 # PRODUCT NAME
-    #                 # ----------------------------------
-
-    #                 st.markdown(
-    #                     f"""
-    #                     <div style="
-    #                         font-size:17px;
-    #                         font-weight:600;
-    #                         word-break:break-word;
-    #                         line-height:22px;
-    #                         margin-bottom:10px;
-    #                     ">
-    #                         🛍️ {item['masala_name']}
-    #                     </div>
-    #                     """,
-    #                     unsafe_allow_html=True
-    #                 )
-
-    #                 # ==================================
-    #                 # QTY / RATE / AMOUNT
-    #                 # ==================================
-
-    #                 c1, c2, c3 = st.columns(
-    #                     [1, 1, 1]
-    #                 )
-
-    #                 # ----------------------------------
-    #                 # QUANTITY
-    #                 # ----------------------------------
-
-    #                 with c1:
-
-    #                     new_qty = st.number_input(
-    #                         "Qty",
-    #                         min_value=0,
-    #                         max_value=int(
-    #                             item["stock"]
-    #                         ),
-    #                         value=int(
-    #                             item["qty"]
-    #                         ),
-    #                         step=1,
-    #                         key=f"cart_qty_{i}"
-    #                     )
-
-    #                 # ----------------------------------
-    #                 # RATE
-    #                 # ----------------------------------
-
-    #                 with c2:
-
-    #                     st.markdown(
-    #                         "**Rate**"
-    #                     )
-
-    #                     st.write(
-    #                         f"₹ {item['rate']}"
-    #                     )
-
-    #                 # ----------------------------------
-    #                 # AMOUNT
-    #                 # ----------------------------------
-
-    #                 with c3:
-
-    #                     st.markdown(
-    #                         "**Amount**"
-    #                     )
-
-    #                     current_amount = (
-    #                         new_qty *
-    #                         item["rate"]
-    #                     )
-
-    #                     st.write(
-    #                         f"₹ {current_amount}"
-    #                     )
-
-    #                 # ==================================
-    #                 # UPDATE CART QUANTITY
-    #                 # ==================================
-
-    #                 if new_qty == 0:
-
-    #                     remove_index = i
-
-    #                 else:
-
-    #                     item["qty"] = new_qty
-
-    #                     grand_total += (
-    #                         new_qty *
-    #                         item["rate"]
-    #                     )
-
-    #         # ==========================================
-    #         # REMOVE ITEM IF QTY = 0
-    #         # ==========================================
-
-    #         if remove_index is not None:
-
-    #             st.session_state.cart.pop(
-    #                 remove_index
-    #             )
-
-    #             st.rerun()
-
-    #         # ==========================================
-    #         # GRAND TOTAL
-    #         # ==========================================
-
-    #         st.divider()
-
-    #         st.success(
-    #             f"Grand Total : ₹ {grand_total}"
-    #         )
-
-    #         st.markdown("###")
-
-    #         # ==========================================
-    #         # CART ACTION BUTTONS
-    #         # ==========================================
-
-    #         col1, col2, col3 = st.columns(3)
-
-    #         # ==========================================
-    #         # CONTINUE SHOPPING
-    #         # ==========================================
-
-    #         with col1:
-
-    #             if st.button(
-    #                 "⬅ Continue Shopping",
-    #                 use_container_width=True
-    #             ):
-
-    #                 st.session_state.selected_category = None
-
-    #                 st.rerun()
-
-    #         # ==========================================
-    #         # CLEAR CART
-    #         # ==========================================
-
-    #         with col2:
-
-    #             if st.button(
-    #                 "🗑 Clear Cart",
-    #                 use_container_width=True
-    #             ):
-
-    #                 st.session_state.cart = []
-
-    #                 st.rerun()
-
-    #         # ==========================================
-    #         # SUBMIT ORDER
-    #         # ==========================================
-
-    #         with col3:
-
-    #             if st.button(
-    #                 "✅ Submit Order",
-    #                 use_container_width=True
-    #             ):
-
-    #                 # ==================================
-    #                 # CUSTOMER CHECK
-    #                 # ==================================
-
-    #                 customer_name = st.session_state.get(
-    #                     "customer_name",
-    #                     ""
-    #                 )
-
-    #                 if not customer_name:
-
-    #                     st.warning(
-    #                         "Please select customer first."
-    #                     )
-
-    #                 elif len(
-    #                     st.session_state.cart
-    #                 ) == 0:
-
-    #                     st.warning(
-    #                         "Cart is Empty."
-    #                     )
-
-    #                 else:
-
-    #                     cursor = connection.cursor()
-
-    #                     error = False
-
-    #                     # ==================================
-    #                     # CHECK STOCK FIRST
-    #                     # ==================================
-
-    #                     for item in st.session_state.cart:
-
-    #                         cursor.execute(
-    #                             """
-    #                             SELECT inventory_qty
-    #                             FROM masala_master
-    #                             WHERE id = %s
-    #                             """,
-    #                             (
-    #                                 item["id"],
-    #                             )
-    #                         )
-
-    #                         result = cursor.fetchone()
-
-    #                         # Product does not exist
-    #                         if result is None:
-
-    #                             st.error(
-    #                                 f"{item['masala_name']} "
-    #                                 f"not found in Product Master."
-    #                             )
-
-    #                             error = True
-
-    #                             continue
-
-    #                         stock = result[0]
-
-    #                         # Store latest stock
-    #                         item["stock"] = stock
-
-    #                         # Check quantity
-    #                         if item["qty"] > stock:
-
-    #                             st.error(
-    #                                 f"{item['masala_name']} "
-    #                                 f"has only {stock} Qty available."
-    #                             )
-
-    #                             error = True
-
-    #                     # ==================================
-    #                     # SAVE ORDER
-    #                     # ==================================
-
-    #                     if not error:
-
-    #                         try:
-
-    #                             for item in st.session_state.cart:
-
-    #                                 amount = (
-    #                                     item["qty"]
-    #                                     *
-    #                                     item["rate"]
-    #                                 )
-
-    #                                 # ==================================
-    #                                 # DUPLICATE ORDER CHECK
-    #                                 # ==================================
-
-    #                                 cursor.execute(
-    #                                     """
-    #                                     SELECT COUNT(*)
-    #                                     FROM masala_order
-    #                                     WHERE cust_name = %s
-    #                                     AND masala_name = %s
-    #                                     AND business_date = CURRENT_DATE
-    #                                     """,
-    #                                     (
-    #                                         customer_name,
-    #                                         item["masala_name"]
-    #                                     )
-    #                                 )
-
-    #                                 count = cursor.fetchone()[0]
-
-    #                                 if count > 0:
-
-    #                                     st.warning(
-    #                                         f"{item['masala_name']} "
-    #                                         f"already ordered today."
-    #                                     )
-
-    #                                     continue
-
-    #                                 # ==================================
-    #                                 # INSERT ORDER
-    #                                 # ==================================
-
-    #                                 cursor.execute(
-    #                                     """
-    #                                     INSERT INTO masala_order
-    #                                     (
-    #                                         id,
-    #                                         cust_name,
-    #                                         masala_name,
-    #                                         qty,
-    #                                         rate,
-    #                                         amount,
-    #                                         business_date,
-    #                                         order_time
-    #                                     )
-    #                                     VALUES
-    #                                     (
-    #                                         %s,
-    #                                         %s,
-    #                                         %s,
-    #                                         %s,
-    #                                         %s,
-    #                                         %s,
-    #                                         CURRENT_DATE,
-    #                                         CURRENT_TIMESTAMP
-    #                                     )
-    #                                     """,
-    #                                     (
-    #                                         item["id"],
-    #                                         customer_name,
-    #                                         item["masala_name"],
-    #                                         item["qty"],
-    #                                         item["rate"],
-    #                                         amount
-    #                                     )
-    #                                 )
-
-    #                                 # ==================================
-    #                                 # REDUCE INVENTORY
-    #                                 # ==================================
-
-    #                                 cursor.execute(
-    #                                     """
-    #                                     UPDATE masala_master
-    #                                     SET inventory_qty =
-    #                                         inventory_qty - %s
-    #                                     WHERE id = %s
-    #                                     """,
-    #                                     (
-    #                                         item["qty"],
-    #                                         item["id"]
-    #                                     )
-    #                                 )
-
-    #                             # ==================================
-    #                             # COMMIT
-    #                             # ==================================
-
-    #                             connection.commit()
-
-    #                             st.success(
-    #                                 "✅ Order Submitted Successfully"
-    #                             )
-
-    #                             # ==================================
-    #                             # CLEAR CART
-    #                             # ==================================
-
-    #                             st.session_state.cart = []
-
-    #                             # ==================================
-    #                             # RETURN TO CATEGORY
-    #                             # ==================================
-
-    #                             st.session_state.selected_category = None
-
-    #                             cursor.close()
-
-    #                             st.rerun()
-
-    #                         except Exception as e:
-
-    #                             # ==================================
-    #                             # ROLLBACK IF ERROR
-    #                             # ==================================
-
-    #                             connection.rollback()
-
-    #                             st.error(
-    #                                 f"Order submission failed: {e}"
-    #                             )
-
-    #                             cursor.close()
+                        3.5 * inch,
+                        1.2 * inch,
+                        1.2 * inch,
+                        1.5 * inch
+                    ]
+                )
+                
+                # =====================================================
+                # ================= TABLE STYLE =======================
+                # =====================================================
+                
+                table.setStyle(TableStyle([
+                
+                    # ===== HEADER =====
+                
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.darkgreen),
+                
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                
+                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                
+                    ('FONTSIZE', (0, 0), (-1, 0), 13),
+                
+                    # ===== BODY =====
+                
+                    ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                
+                    ('FONTSIZE', (0, 1), (-1, -1), 11),
+                
+                    ('ALIGN', (1, 1), (-1, -1), 'CENTER'),
+                
+                    # ===== TOTAL ROW =====
+                
+                    ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+                
+                    ('BACKGROUND', (0, -1), (-1, -1), colors.lightgrey),
+                
+                    # ===== GRID =====
+                
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                
+                    # ===== PADDING =====
+                
+                    ('TOPPADDING', (0, 0), (-1, -1), 10),
+                
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+                
+                    # ===== ROW BACKGROUND =====
+                
+                    ('BACKGROUND', (0, 1), (-1, -2), colors.whitesmoke),
+                
+                ]))
+                
+                elements.append(table)
+                
+                elements.append(Spacer(1, 30))
+                
+                # =====================================================
+                # ================= FOOTER ============================
+                # =====================================================
+                
+                footer = Paragraph(
+                    "<font size=11><b>Thank You Visit Again</b></font>",
+                    styles['Normal']
+                )
+                
+                elements.append(footer)
+                
+                # =====================================================
+                # ================= BUILD PDF =========================
+                # =====================================================
+                
+                doc.build(elements)
+                
+                buffer.seek(0)
+                
+                # =====================================================
+                # ================= DOWNLOAD BUTTON ===================
+                # =====================================================
+                
+                st.download_button(
+                    label="📄 Download Bill PDF",
+                    data=buffer,
+                    file_name=f"{cust_name}_bill.pdf",
+                    mime="application/pdf"
+                )
+
+
+                
+
+        # ================= CANCEL ORDER =================
+        with btn2:
+
+            confirm_cancel = st.checkbox("Confirm Cancel Order")
+
+            if st.button("❌ Cancel Order", use_container_width=True):
+
+                if not confirm_cancel:
+                    st.warning("Please confirm cancellation first")
+                    st.stop()
+
+                cursor = connection.cursor()
+
+                cursor.execute("""
+                    UPDATE masala_order
+                    SET status = 'Cancelled',
+                        qty_del = 0,
+                        amount_del = 0,
+                        business_date_del = CURRENT_DATE,
+                        order_time_del = CURRENT_TIMESTAMP
+                    WHERE cust_name = %s
+                    AND status = 'Pending'
+                """, (cust_name,))
+
+                connection.commit()
+                cursor.close()
+
+                st.error(f"Order cancelled for {cust_name} ❌")
+
+       
+        # ================= BILL PAGE =================
+     
+    elif menu == "Bill":
+    
+         st.subheader("🧾 Generate Customer Bill")
+    
+         # ================= BILL TYPE =================
+    
+         bill_type = st.radio(
+             "Select Bill Type",
+             ["Delivered", "Pending"],
+             horizontal=True
+         )
+    
+         # =========================================================
+         # ================= DELIVERED BILL ========================
+         # =========================================================
+    
+         if bill_type == "Delivered":
+    
+             # -------- FETCH CUSTOMERS --------
+    
+             bill_cust_query = """
+                 SELECT DISTINCT cust_name
+                 FROM masala_order
+                 WHERE status IN ('Delivered','Partial')
+                 ORDER BY cust_name
+             """
+    
+             bill_cust_df = pd.read_sql(
+                 bill_cust_query,
+                 connection
+             )
+    
+             if bill_cust_df.empty:
+                 st.warning("No delivered customers found")
+                 st.stop()
+    
+             # -------- SELECT BOXES --------
+    
+             col1, col2 = st.columns(2)
+    
+             with col1:
+    
+                 cust_name = st.selectbox(
+                     "Select Customer",
+                     bill_cust_df["cust_name"],
+                     key="del_customer"
+                 )
+    
+             # -------- FETCH DELIVERY DATES --------
+    
+             date_query = """
+                 SELECT DISTINCT business_date_del
+                 FROM masala_order
+                 WHERE cust_name = %s
+                 AND status IN ('Delivered','Partial')
+                 ORDER BY business_date_del DESC
+             """
+    
+             date_df = pd.read_sql(
+                 date_query,
+                 connection,
+                 params=(cust_name,)
+             )
+    
+             if date_df.empty:
+                 st.warning("No delivery dates found")
+                 st.stop()
+    
+             with col2:
+    
+                 selected_date = st.selectbox(
+                     "Select Delivery Date",
+                     date_df["business_date_del"],
+                     key="del_date"
+                 )
+    
+             # -------- FETCH BILL DATA --------
+    
+             bill_query = """
+                 SELECT
+                     masala_name,
+                     qty_del,
+                     rate
+                 FROM masala_order
+                 WHERE cust_name = %s
+                 AND status IN ('Delivered','Partial')
+                 AND business_date_del = %s
+             """
+    
+             bill_df = pd.read_sql(
+                 bill_query,
+                 connection,
+                 params=(cust_name, selected_date)
+             )
+    
+             if bill_df.empty:
+                 st.warning("No delivered items found")
+                 st.stop()
+    
+             st.markdown("### 📦 Delivered Items")
+    
+             # -------- DISPLAY TABLE --------
+    
+             total = 0
+             display_data = []
+    
+             for _, row in bill_df.iterrows():
+    
+                 amount = row["qty_del"] * row["rate"]
+    
+                 total += amount
+    
+                 display_data.append({
+                     "Masala": row["masala_name"],
+                     "Qty": int(row["qty_del"]),
+                     "Rate": f"₹ {row['rate']:.2f}",
+                     "Amount": f"₹ {amount:.2f}"
+                 })
+    
+             st.dataframe(
+                 display_data,
+                 use_container_width=True
+             )
+    
+             st.markdown(f"### 💰 Total: ₹ {total:.2f}")
+    
+    
+                         # -------- GENERATE PDF --------
+    
+             if st.button("📄 Generate & Download Delivered Bill"):
+    
+                 from reportlab.platypus import (
+                     SimpleDocTemplate,
+                     Table,
+                     TableStyle,
+                     Paragraph,
+                     Spacer
+                 )
+    
+                 from reportlab.lib import colors
+                 from reportlab.lib.styles import getSampleStyleSheet
+                 from reportlab.lib.pagesizes import A4
+                 from reportlab.lib.units import inch
+                 from io import BytesIO
+    
+                 buffer = BytesIO()
+    
+                 # =====================================================
+                 # ================= PDF DOCUMENT ======================
+                 # =====================================================
+    
+                 doc = SimpleDocTemplate(
+                     buffer,
+                     pagesize=A4,
+                     rightMargin=30,
+                     leftMargin=30,
+                     topMargin=30,
+                     bottomMargin=20
+                 )
+    
+                 elements = []
+    
+                 styles = getSampleStyleSheet()
+    
+                 # =====================================================
+                 # ================= TITLE =============================
+                 # =====================================================
+    
+                 title = Paragraph(
+                     "<font size=20><b>MASALA DELIVERY BILL</b></font>",
+                     styles['Title']
+                 )
+    
+                 elements.append(title)
+    
+                 elements.append(Spacer(1, 20))
+    
+                 # =====================================================
+                 # ================= CUSTOMER INFO =====================
+                 # =====================================================
+    
+                 customer_info = f"""
+                 <font size=12>
+                 <b>Customer:</b> {cust_name}<br/>
+                 <b>Delivery Date:</b> {selected_date}
+                 </font>
+                 """
+    
+                 elements.append(
+                     Paragraph(customer_info, styles['Normal'])
+                 )
+    
+                 elements.append(Spacer(1, 20))
+    
+                 # =====================================================
+                 # ================= TABLE DATA ========================
+                 # =====================================================
+    
+                 table_data = []
+    
+                 # Header Row
+                 table_data.append([
+                     "Masala Name",
+                     "Quantity",
+                     "Rate",
+                     "Amount"
+                 ])
+    
+                 # Data Rows
+                 for row in display_data:
+                 
+                     table_data.append([
+                         row["Masala"],
+                         str(row["Qty"]),
+                         row["Rate"],
+                         row["Amount"]
+                     ])
+    
+                 # Total Row
+                 table_data.append([
+                     "",
+                     "",
+                     "TOTAL",
+                     f"₹ {total:.2f}"
+                 ])
+    
+                 # =====================================================
+                 # ================= FULL PAGE TABLE ===================
+                 # =====================================================
+    
+                 table = Table(
+                     table_data,
+    
+                     # Full Width Columns
+                     colWidths=[
+                         3.5 * inch,
+                         1.2 * inch,
+                         1.2 * inch,
+                         1.5 * inch
+                     ]
+                 )
+    
+                 # =====================================================
+                 # ================= TABLE STYLE =======================
+                 # =====================================================
+    
+                 table.setStyle(TableStyle([
+                 
+                     # Header Background
+                     ('BACKGROUND', (0, 0), (-1, 0), colors.darkgreen),
+    
+                     # Header Text Color
+                     ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+    
+                     # Header Font
+                     ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+    
+                     # Header Font Size
+                     ('FONTSIZE', (0, 0), (-1, 0), 13),
+    
+                     # Body Font
+                     ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+    
+                     # Body Font Size
+                     ('FONTSIZE', (0, 1), (-1, -1), 11),
+    
+                     # Alignment
+                     ('ALIGN', (1, 1), (-1, -1), 'CENTER'),
+    
+                     # Total Row Bold
+                     ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+    
+                     # Total Row Background
+                     ('BACKGROUND', (0, -1), (-1, -1), colors.lightgrey),
+    
+                     # Grid
+                     ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    
+                     # Padding
+                     ('TOPPADDING', (0, 0), (-1, -1), 10),
+                     ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+    
+                     # Alternate Row Background
+                     ('BACKGROUND', (0, 1), (-1, -2), colors.whitesmoke),
+    
+                 ]))
+    
+                 elements.append(table)
+    
+                 elements.append(Spacer(1, 30))
+    
+                 # =====================================================
+                 # ================= FOOTER ============================
+                 # =====================================================
+    
+                 footer = Paragraph(
+                     "<font size=11><b>Thank You Visit Again</b></font>",
+                     styles['Normal']
+                 )
+    
+                 elements.append(footer)
+    
+                 # =====================================================
+                 # ================= BUILD PDF =========================
+                 # =====================================================
+    
+                 doc.build(elements)
+    
+                 buffer.seek(0)
+    
+                 # =====================================================
+                 # ================= DOWNLOAD BUTTON ===================
+                 # =====================================================
+    
+                 st.download_button(
+                     label="⬇ Download Delivered PDF",
+                     data=buffer,
+                     file_name=f"{cust_name}_{selected_date}_delivered_bill.pdf",
+                     mime="application/pdf"
+                 )
+    
+         # =========================================================
+         # ================= PENDING BILL ==========================
+         # =========================================================
+    
+         elif bill_type == "Pending":
+    
+             # -------- FETCH CUSTOMERS --------
+    
+             pending_cust_query = """
+                 SELECT DISTINCT cust_name
+                 FROM masala_order
+                 WHERE status = 'Pending'
+                 ORDER BY cust_name
+             """
+    
+             pending_cust_df = pd.read_sql(
+                 pending_cust_query,
+                 connection
+             )
+    
+             if pending_cust_df.empty:
+                 st.warning("No pending customers found")
+                 st.stop()
+    
+             # -------- SELECT BOXES --------
+    
+             col1, col2 = st.columns(2)
+    
+             with col1:
+    
+                 cust_name = st.selectbox(
+                     "Select Pending Customer",
+                     pending_cust_df["cust_name"],
+                     key="pending_customer"
+                 )
+    
+             # -------- FETCH PENDING DATES --------
+    
+             pending_date_query = """
+                 SELECT DISTINCT business_date
+                 FROM masala_order
+                 WHERE cust_name = %s
+                 AND status = 'Pending'
+                 ORDER BY business_date DESC
+             """
+    
+             pending_date_df = pd.read_sql(
+                 pending_date_query,
+                 connection,
+                 params=(cust_name,)
+             )
+    
+             if pending_date_df.empty:
+                 st.warning("No pending dates found")
+                 st.stop()
+    
+             with col2:
+    
+                 selected_pending_date = st.selectbox(
+                     "Select Pending Date",
+                     pending_date_df["business_date"],
+                     key="pending_date"
+                 )
+    
+             # -------- FETCH PENDING ITEMS --------
+    
+             pending_bill_query = """
+                 SELECT
+                     masala_name,
+                     qty,
+                     rate
+                 FROM masala_order
+                 WHERE cust_name = %s
+                 AND status = 'Pending'
+                 AND business_date = %s
+             """
+    
+             pending_bill_df = pd.read_sql(
+                 pending_bill_query,
+                 connection,
+                 params=(
+                     cust_name,
+                     selected_pending_date
+                 )
+             )
+    
+             if pending_bill_df.empty:
+                 st.warning("No pending items found")
+                 st.stop()
+    
+             st.markdown("### 📦 Pending Items")
+    
+             # -------- DISPLAY TABLE --------
+    
+             pending_total = 0
+    
+             pending_display_data = []
+    
+             for _, row in pending_bill_df.iterrows():
+    
+                 amount = row["qty"] * row["rate"]
+    
+                 pending_total += amount
+    
+                 pending_display_data.append({
+    
+                     "Masala": row["masala_name"],
+    
+                     "Qty": int(row["qty"]),
+    
+                     "Rate": f"₹ {row['rate']:.2f}",
+    
+                     "Amount": f"₹ {amount:.2f}"
+                 })
+    
+             st.dataframe(
+                 pending_display_data,
+                 use_container_width=True
+             )
+    
+             st.markdown(
+                 f"### 💰 Pending Total: ₹ {pending_total:.2f}"
+             )
+    
+             # -------- GENERATE PDF --------
+    
+             if st.button("📄 Generate & Download Pending Bill"):
+             
+                 from reportlab.platypus import (
+                     SimpleDocTemplate,
+                     Table,
+                     TableStyle,
+                     Paragraph,
+                     Spacer
+                 )
+         
+                 from reportlab.lib import colors
+                 from reportlab.lib.styles import getSampleStyleSheet
+                 from reportlab.lib.pagesizes import A4
+                 from reportlab.lib.units import inch
+                 from io import BytesIO
+         
+                 buffer = BytesIO()
+         
+                 # ===== A4 PAGE WITH MARGINS =====
+         
+                 doc = SimpleDocTemplate(
+                     buffer,
+                     pagesize=A4,
+                     rightMargin=30,
+                     leftMargin=30,
+                     topMargin=30,
+                     bottomMargin=20
+                 )
+         
+                 elements = []
+         
+                 styles = getSampleStyleSheet()
+         
+                 # =====================================================
+                 # ================= TITLE =============================
+                 # =====================================================
+         
+                 title = Paragraph(
+                     "<font size=20><b>MASALA PENDING BILL</b></font>",
+                     styles['Title']
+                 )
+         
+                 elements.append(title)
+         
+                 elements.append(Spacer(1, 20))
+         
+                 # =====================================================
+                 # ================= CUSTOMER INFO =====================
+                 # =====================================================
+         
+                 customer_info = f"""
+                 <font size=12>
+                 <b>Customer:</b> {cust_name}<br/>
+                 <b>Pending Date:</b> {selected_pending_date}
+                 </font>
+                 """
+         
+                 elements.append(
+                     Paragraph(customer_info, styles['Normal'])
+                 )
+         
+                 elements.append(Spacer(1, 20))
+         
+                 # =====================================================
+                 # ================= TABLE DATA ========================
+                 # =====================================================
+         
+                 table_data = []
+         
+                 # Header
+                 table_data.append([
+                     "Masala Name",
+                     "Quantity",
+                     "Rate",
+                     "Amount"
+                 ])
+         
+                 # Data Rows
+                 for row in pending_display_data:
+                 
+                     table_data.append([
+                         row["Masala"],
+                         str(row["Qty"]),
+                         row["Rate"],
+                         row["Amount"]
+                     ])
+         
+                 # Total Row
+                 table_data.append([
+                     "",
+                     "",
+                     "TOTAL",
+                     f"₹ {pending_total:.2f}"
+                 ])
+         
+                 # =====================================================
+                 # ================= FULL WIDTH TABLE ==================
+                 # =====================================================
+         
+                 table = Table(
+                     table_data,
+         
+                     # Full Page Width
+                     colWidths=[
+                         3.5 * inch,
+                         1.2 * inch,
+                         1.2 * inch,
+                         1.5 * inch
+                     ]
+                 )
+         
+                 # =====================================================
+                 # ================= TABLE STYLE =======================
+                 # =====================================================
+         
+                 table.setStyle(TableStyle([
+                 
+                     # Header Background
+                     ('BACKGROUND', (0, 0), (-1, 0), colors.orange),
+         
+                     # Header Text Color
+                     ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+         
+                     # Header Font
+                     ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+         
+                     # Header Font Size
+                     ('FONTSIZE', (0, 0), (-1, 0), 13),
+         
+                     # Body Font
+                     ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+         
+                     # Body Font Size
+                     ('FONTSIZE', (0, 1), (-1, -1), 11),
+         
+                     # Alignment
+                     ('ALIGN', (1, 1), (-1, -1), 'CENTER'),
+         
+                     # Total Row Bold
+                     ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+         
+                     # Total Row Background
+                     ('BACKGROUND', (0, -1), (-1, -1), colors.lightgrey),
+         
+                     # Grid
+                     ('GRID', (0, 0), (-1, -1), 1, colors.black),
+         
+                     # Padding
+                     ('TOPPADDING', (0, 0), (-1, -1), 10),
+                     ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+         
+                     # Alternate Row Colors
+                     ('BACKGROUND', (0, 1), (-1, -2), colors.whitesmoke),
+         
+                 ]))
+         
+                 elements.append(table)
+         
+                 elements.append(Spacer(1, 30))
+         
+                 # =====================================================
+                 # ================= FOOTER ============================
+                 # =====================================================
+         
+                 footer = Paragraph(
+                     "<font size=11><b>Your product will be delivered soon</b></font>",
+                     styles['Normal']
+                 )
+         
+                 elements.append(footer)
+         
+                 # =====================================================
+                 # ================= BUILD PDF =========================
+                 # =====================================================
+         
+                 doc.build(elements)
+         
+                 buffer.seek(0)
+         
+                 # =====================================================
+                 # ================= DOWNLOAD BUTTON ===================
+                 # =====================================================
+         
+                 st.download_button(
+                     label="⬇ Download Pending PDF",
+                     data=buffer,
+                     file_name=f"{cust_name}_{selected_pending_date}_pending_bill.pdf",
+                     mime="application/pdf"
+                 )  
 
 
 

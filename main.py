@@ -2,6 +2,7 @@ import streamlit as st
 from outlet_onboarding import outlet_onaboard
 from masala_master import masala_master
 from book_order import order_details
+from record import records
 from login import login, create_user
 
 
@@ -75,8 +76,8 @@ elif menu == "Product Master":
 elif menu == "book_order":
     order_details()
 
-# elif menu == "Records":
-#     records()
+elif menu == "Records":
+    records()
 
 if menu == "User Management":
     create_user()
