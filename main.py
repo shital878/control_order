@@ -29,7 +29,8 @@ if not st.session_state.logged_in:
     login()
  
 
-    # IMPORTANT
+    # IMPORTANT--if user not login Stop executing the rest of this script.
+    # That would be a security problem because the user could see the application before logging in.
     st.stop()
 
 
