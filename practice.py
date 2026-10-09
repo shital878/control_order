@@ -446,4 +446,227 @@ import time
 #     st.header("Python")
 #     st.write("Python programming tutorials")
 
-#30)------------------Multiple pages----------------------------------------------------------------
+#30)------------------Generate QR code--------------------------------------------------------------
+
+# import streamlit as st
+# import qrcode
+# from io import BytesIO
+
+# st.set_page_config(page_title="QR Code Generator")
+
+# st.title("QR Code Generator")
+
+# # Get input from user
+# text = st.text_input(
+#     "Enter text or URL",
+#     placeholder="https://www.google.com"
+# )
+
+# if st.button("Generate QR Code"):
+
+#     if text.strip():
+
+#         # Generate QR code
+#         qr = qrcode.make(text.strip())
+
+#         # Save QR code in memory
+#         buffer = BytesIO()
+#         qr.save(buffer, format="PNG")
+#         qr_bytes = buffer.getvalue()
+
+#         # Display QR code
+#         st.image(qr_bytes, caption="Your QR Code", width=250)
+
+#         # Download QR code
+#         st.download_button(
+#             label="Download QR Code",
+#             data=qr_bytes,
+#             file_name="my_qr_code.png",
+#             mime="image/png"
+#         )
+
+#     else:
+#         st.warning("Please enter some text or URL.")
+
+
+#31)------------------Sales Dashboard--------------------------------------------------------------
+# 1)
+
+# import streamlit as st
+# import pandas as pd
+# import plotly.express as px
+
+# st.set_page_config(
+#     page_title="Sales Dashboard",
+#     page_icon="📊",
+#     layout="wide"
+# )
+
+# st.title("📊 Sales Dashboard")
+# st.write("Welcome to your sales analytics dashboard")
+
+# # 1. Sample sales data
+# data = {
+#     "Date": [
+#         "2026-10-01", "2026-10-02", "2026-10-03",
+#         "2026-10-04", "2026-10-05", "2026-10-06",
+#         "2026-10-07", "2026-10-08"
+#     ],
+#     "Product": [
+#         "Rice", "Oil", "Sugar", "Rice",
+#         "Tea", "Oil", "Sugar", "Tea"
+#     ],
+#     "Category": [
+#         "Grocery", "Grocery", "Grocery", "Grocery",
+#         "Beverages", "Grocery", "Grocery", "Beverages"
+#     ],
+#     "Quantity": [10, 5, 8, 15, 6, 7, 12, 9],
+#     "Price": [60, 150, 45, 60, 120, 150, 45, 120]
+# }
+
+# df = pd.DataFrame(data)
+# df["Date"] = pd.to_datetime(df["Date"])
+# df["Sales"] = df["Quantity"] * df["Price"]
+
+# # 2. Sidebar filters
+# st.sidebar.header("Filters")
+
+# categories = ["All"] + sorted(df["Category"].unique().tolist())
+
+# selected_category = st.sidebar.selectbox(
+#     "Select Category",
+#     categories
+# )
+
+# if selected_category != "All":
+#     filtered_df = df[df["Category"] == selected_category]
+# else:
+#     filtered_df = df.copy()
+
+# # 3. KPI metrics
+# total_sales = filtered_df["Sales"].sum()
+# total_orders = len(filtered_df)
+# total_quantity = filtered_df["Quantity"].sum()
+# average_sales = (
+#     total_sales / total_orders if total_orders > 0 else 0
+# )
+
+# col1, col2, col3, col4 = st.columns(4)
+
+# col1.metric("💰 Total Sales", f"₹{total_sales:,.0f}")
+# col2.metric("📦 Total Orders", total_orders)
+# col3.metric("🛒 Units Sold", total_quantity)
+# col4.metric("📈 Avg. Order Value", f"₹{average_sales:,.0f}")
+
+# st.divider()
+
+# # 4. Sales by date
+# st.subheader("Daily Sales")
+
+# daily_sales = (
+#     filtered_df.groupby("Date", as_index=False)["Sales"]
+#     .sum()
+# )
+
+# fig1 = px.bar(
+#     daily_sales,
+#     x="Date",
+#     y="Sales",
+#     title="Sales by Date",
+#     text_auto=True
+# )
+
+# st.plotly_chart(fig1, use_container_width=True)
+
+# # 5. Sales by product
+# col5, col6 = st.columns(2)
+
+# with col5:
+#     st.subheader("Sales by Product")
+
+#     product_sales = (
+#         filtered_df.groupby("Product", as_index=False)["Sales"]
+#         .sum()
+#     )
+
+#     fig2 = px.bar(
+#         product_sales,
+#         x="Product",
+#         y="Sales",
+#         color="Product",
+#         title="Product Performance"
+#     )
+
+#     st.plotly_chart(fig2, use_container_width=True)
+
+# with col6:
+#     st.subheader("Sales by Category")
+
+#     category_sales = (
+#         filtered_df.groupby("Category", as_index=False)["Sales"]
+#         .sum()
+#     )
+
+#     fig3 = px.pie(
+#         category_sales,
+#         names="Category",
+#         values="Sales",
+#         title="Category Sales Distribution"
+#     )
+
+#     st.plotly_chart(fig3, use_container_width=True)
+
+# # 6. Sales data table
+# st.subheader("Sales Details")
+
+# st.dataframe(
+#     filtered_df,
+#     use_container_width=True,
+#     hide_index=True
+# )
+
+
+
+# ____________________________________________________________________________________;
+
+# import streamlit as st
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import numpy as np
+
+
+# st.title("Simple Sales Dashboard")
+
+# np.random.seed(42)
+
+# data = {
+#     "Month":["January","February","March","April","May","June"],
+#     "Sales":np.random.randint(200,500,6),
+#     "Cost":np.random.randint(100,300,6)
+# }
+
+# df = pd.DataFrame(data)
+# st.subheader("Sales Data")
+# st.dataframe(df)
+
+# #Bar Chart
+
+# st.subheader("Sales vs Cost Chart")
+# fig,ax = plt.subplots()
+# ax.bar(df["Month"],df["Sales"],label="Sales",color="skyblue")
+# ax.bar(df["Month"],df["Cost"],label="Cost",color="salmon",alpha=0.7)
+# ax.legend()
+
+# st.pyplot(fig)
+
+
+# #Filter option
+# st.subheader("Monthly sales Analysis")
+# selected_month = st.selectbox("Select a month: ",df["Month"])
+# selected_data = df[df["Month"]==selected_month]
+
+# st.write(f"Sales in {selected_month}:{selected_data["Sales"].values[0]}")
+# st.write(f"Cost in {selected_month}: {selected_data["Cost"].values[0]}")
+
+
+# ____________________________________________________________________________________;
