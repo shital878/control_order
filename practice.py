@@ -669,4 +669,527 @@ import time
 # st.write(f"Cost in {selected_month}: {selected_data["Cost"].values[0]}")
 
 
-# ____________________________________________________________________________________;
+# _____________________________Log in page_______________________________________________________;
+
+# import streamlit as st
+# import sqlite3
+# import hashlib
+# import os
+
+# st.set_page_config(
+#     page_title="Sales Management System",
+#     page_icon="🔐",
+#     layout="centered"
+# )
+
+# # Create SQLite database and user table
+# conn = sqlite3.connect("users.db")
+# conn.execute("""
+#     CREATE TABLE IF NOT EXISTS users (
+#         username TEXT PRIMARY KEY,
+#         password_hash TEXT NOT NULL,
+#         salt TEXT NOT NULL
+#     )
+# """)
+# conn.commit()
+# conn.close()
+
+
+# def hash_password(password, salt):
+#     return hashlib.pbkdf2_hmac(
+#         "sha256",
+#         password.encode(),
+#         salt,
+#         200000
+#     ).hex()
+
+
+# def register_user(username, password):
+#     username = username.strip()
+
+#     if not username or not password:
+#         return False, "Enter username and password."
+
+#     salt = os.urandom(16)
+#     password_hash = hash_password(password, salt)
+
+#     try:
+#         with sqlite3.connect("users.db") as conn:
+#             conn.execute(
+#                 """INSERT INTO users
+#                    (username, password_hash, salt)
+#                    VALUES (?, ?, ?)""",
+#                 (username, password_hash, salt)
+#             )
+#         return True, "Registration successful!"
+
+#     except sqlite3.IntegrityError:
+#         return False, "Username already exists."
+
+
+# def verify_user(username, password):
+#     with sqlite3.connect("users.db") as conn:
+#         user = conn.execute(
+#             """SELECT password_hash, salt
+#                FROM users WHERE username = ?""",
+#             (username.strip(),)
+#         ).fetchone()
+
+#     if user is None:
+#         return False
+
+#     saved_hash, salt = user
+#     entered_hash = hash_password(password, salt)
+
+#     return entered_hash == saved_hash
+
+
+# # Login interface
+# st.title("🔐 Sales Management System")
+
+# if "logged_in" not in st.session_state:
+#     st.session_state.logged_in = False
+
+# if st.session_state.logged_in:
+#     st.success(
+#         f"Welcome, {st.session_state.username}!"
+#     )
+
+#     st.header("Sales Dashboard")
+#     st.write("You are logged in successfully.")
+
+#     if st.button("Logout"):
+#         st.session_state.logged_in = False
+#         st.session_state.pop("username", None)
+#         st.rerun()
+
+# else:
+#     page = st.radio(
+#         "Choose an option",
+#         ["Login", "Register"],
+#         horizontal=True
+#     )
+
+#     username = st.text_input("Username")
+#     password = st.text_input(
+#         "Password",
+#         type="password"
+#     )
+
+#     if page == "Register":
+#         if st.button("Create Account"):
+#             success, message = register_user(
+#                 username, password
+#             )
+
+#             if success:
+#                 st.success(message)
+#             else:
+#                 st.error(message)
+
+#     else:
+#         if st.button("Login"):
+#             if verify_user(username, password):
+#                 st.session_state.logged_in = True
+#                 st.session_state.username = username.strip()
+#                 st.rerun()
+#             else:
+#                 st.error("Invalid username or password.")
+
+
+
+# ******************************Generate password*************************************
+
+# import random
+# import string
+
+# st.set_page_config(page_title="Password Generator")
+
+# st.title("Secute Password Generator")
+# st.write("Generate strong and secure password based on your preference")
+
+# length = st.slider("Password Length",min_value=6,max_value=32,value=12)
+# include_digits = st.checkbox("Include digits(0-9)",value=True)
+# include_symbols = st.checkbox("Include symbols(!,@,#...)",value=True)
+# include_uppercase = st.checkbox("Include Upper letters (A-Z)" ,value=True)
+# include_lowercase = st.checkbox("Include Lower letters (a-z)" ,value=True)
+
+# if st.button("Generate Password"):
+
+#     characters = ""
+
+#     if include_digits:
+#         characters += string.digits
+
+#     if include_symbols:
+#         characters += string.punctuation
+
+#     if include_uppercase:
+#         characters += string.ascii_uppercase
+
+#     if include_lowercase:
+#         characters += string.ascii_lowercase
+
+#     if not characters:
+#         st.error("Please select at least one character type.")
+
+#     else:
+#         password = "".join(
+#             random.choice(characters)
+#             for _ in range(length)
+#         )
+
+#         st.success("Your password is generated!")
+#         st.code(password)
+
+#         st.download_button(
+#             "Download Password",
+#             data=password,
+#             file_name="password.txt",
+#             mime="text/plain"
+#         )
+
+
+
+# ******************************************************************
+
+# import streamlit as st
+# import requests
+# import pandas as pd
+# import plotly.express as px
+
+# st.set_page_config(
+#     page_title="City Temperature Dashboard",
+#     page_icon="🌦️",
+#     layout="wide"
+# )
+
+# st.title("🌦️ City Temperature Dashboard")
+# st.write("Check current weather and temperature by city.")
+
+# # City selection
+# cities = {
+#     "Mumbai": (19.0760, 72.8777),
+#     "Pune": (18.5204, 73.8567),
+#     "Bengaluru": (12.9716, 77.5946),
+#     "Delhi": (28.6139, 77.2090),
+#     "Chennai": (13.0827, 80.2707),
+#     "Hyderabad": (17.3850, 78.4867),
+#     "Kolkata": (22.5726, 88.3639),
+#     "London": (51.5072, -0.1276),
+#     "New York": (40.7128, -74.0060)
+# }
+
+# selected_city = st.sidebar.selectbox(
+#     "Select City",
+#     list(cities.keys())
+# )
+
+# latitude, longitude = cities[selected_city]
+
+# # Fetch current weather
+# if st.button("Get Weather"):
+
+#     try:
+#         url = "https://api.open-meteo.com/v1/forecast"
+
+#         params = {
+#             "latitude": latitude,
+#             "longitude": longitude,
+#             "current": (
+#                 "temperature_2m,"
+#                 "relative_humidity_2m,"
+#                 "apparent_temperature,"
+#                 "wind_speed_10m,"
+#                 "weather_code"
+#             ),
+#             "hourly": "temperature_2m",
+#             "forecast_days": 1,
+#             "timezone": "auto"
+#         }
+
+#         response = requests.get(
+#             url,
+#             params=params,
+#             timeout=15
+#         )
+#         response.raise_for_status()
+#         data = response.json()
+
+#         current = data["current"]
+
+#         st.subheader(f"📍 Weather in {selected_city}")
+#         st.caption(f"Local observation time: {current['time']}")
+
+#         # Weather metrics
+#         col1, col2, col3, col4 = st.columns(4)
+
+#         col1.metric(
+#             "🌡️ Temperature",
+#             f"{current['temperature_2m']} °C"
+#         )
+
+#         col2.metric(
+#             "🤗 Feels Like",
+#             f"{current['apparent_temperature']} °C"
+#         )
+
+#         col3.metric(
+#             "💧 Humidity",
+#             f"{current['relative_humidity_2m']}%"
+#         )
+
+#         col4.metric(
+#             "💨 Wind Speed",
+#             f"{current['wind_speed_10m']} km/h"
+#         )
+
+#         # Hourly temperature chart
+#         st.subheader("Hourly Temperature Forecast")
+
+#         hourly = data["hourly"]
+
+#         df = pd.DataFrame({
+#             "Time": pd.to_datetime(hourly["time"]),
+#             "Temperature (°C)": hourly["temperature_2m"]
+#         })
+
+#         fig = px.line(
+#             df,
+#             x="Time",
+#             y="Temperature (°C)",
+#             markers=True,
+#             title=f"Temperature Today - {selected_city}"
+#         )
+
+#         st.plotly_chart(
+#             fig,
+#             use_container_width=True
+#         )
+
+#         st.subheader("Hourly Weather Data")
+#         st.dataframe(df, use_container_width=True)
+
+#     except requests.RequestException as e:
+#         st.error(f"Unable to fetch weather data: {e}")
+
+#     except (KeyError, ValueError) as e:
+#         st.error(f"Unexpected weather data format: {e}")
+
+# else:
+#     st.info("Select a city and click Get Weather.")
+
+
+# *******************stock price**************
+
+
+# import streamlit as st
+# import yfinance as yf
+# import pandas as pd
+# import plotly.express as px
+
+# st.set_page_config(
+#     page_title="Stock Price Dashboard",
+#     page_icon="📈",
+#     layout="wide"
+# )
+
+# st.title("📈 Stock Price Dashboard")
+# st.write("Explore stock prices and historical trends.")
+
+# # Stock selection
+# stock_options = {
+#     "Reliance Industries": "RELIANCE.NS",
+#     "TCS": "TCS.NS",
+#     "Infosys": "INFY.NS",
+#     "HDFC Bank": "HDFCBANK.NS",
+#     "ICICI Bank": "ICICIBANK.NS",
+#     "Apple": "AAPL",
+#     "Microsoft": "MSFT",
+#     "NVIDIA": "NVDA"
+# }
+
+# company = st.sidebar.selectbox(
+#     "Select Company",
+#     list(stock_options.keys())
+# )
+
+# ticker = stock_options[company]
+
+# period = st.sidebar.selectbox(
+#     "Select Period",
+#     ["1mo", "3mo", "6mo", "1y", "5y"],
+#     index=3
+# )
+
+# if st.button("Get Stock Data"):
+
+#     try:
+#         with st.spinner("Fetching stock data..."):
+#             df = yf.Ticker(ticker).history(period=period)
+
+#         if df.empty:
+#             st.error("No stock data found. Try again later.")
+#             st.stop()
+
+#         df = df.reset_index()
+
+#         # Latest available closing price
+#         latest_price = df["Close"].iloc[-1]
+#         previous_price = (
+#             df["Close"].iloc[-2]
+#             if len(df) > 1 else latest_price
+#         )
+
+#         change = latest_price - previous_price
+#         change_percent = (
+#             change / previous_price * 100
+#             if previous_price else 0
+#         )
+
+#         # Dashboard metrics
+#         col1, col2, col3 = st.columns(3)
+
+#         col1.metric(
+#             "Latest Closing Price",
+#             f"{latest_price:,.2f}",
+#             f"{change_percent:+.2f}%"
+#         )
+
+#         col2.metric(
+#             "Highest Price",
+#             f"{df['High'].max():,.2f}"
+#         )
+
+#         col3.metric(
+#             "Lowest Price",
+#             f"{df['Low'].min():,.2f}"
+#         )
+
+#         # Historical price chart
+#         st.subheader(f"{company} - Price History")
+
+#         fig = px.line(
+#             df,
+#             x="Date",
+#             y="Close",
+#             title="Closing Price Trend",
+#             labels={
+#                 "Date": "Date",
+#                 "Close": "Closing Price"
+#             }
+#         )
+
+#         st.plotly_chart(
+#             fig,
+#             use_container_width=True
+#         )
+
+#         # Trading volume
+#         st.subheader("Trading Volume")
+
+#         fig2 = px.bar(
+#             df,
+#             x="Date",
+#             y="Volume",
+#             title="Daily Trading Volume"
+#         )
+
+#         st.plotly_chart(
+#             fig2,
+#             use_container_width=True
+#         )
+
+#         # Raw data
+#         st.subheader("Historical Stock Data")
+
+#         st.dataframe(
+#             df[["Date", "Open", "High", "Low",
+#                 "Close", "Volume"]],
+#             use_container_width=True,
+#             hide_index=True
+#         )
+
+#     except Exception as e:
+#         st.error(f"Unable to fetch stock data: {e}")
+
+
+# ***************************************************
+
+
+
+import streamlit as st
+import yfinance as yf
+import plotly.express as px
+
+st.title("📈 Stock Price Dashboard")
+
+# Enter any company ticker
+ticker = st.text_input(
+    "Enter stock symbol",
+    value="RELIANCE.NS",
+    placeholder="Example: TCS.NS, AAPL, NVDA"
+).strip().upper()
+
+period = st.selectbox(
+    "Select Period",
+    ["1mo", "3mo", "6mo", "1y", "5y"],
+    index=3
+)
+
+if st.button("Get Stock Data"):
+
+    if not ticker:
+        st.warning("Please enter a stock symbol.")
+
+    else:
+        try:
+            with st.spinner("Fetching stock data..."):
+                df = yf.Ticker(ticker).history(period=period)
+
+            if df.empty:
+                st.error(
+                    "No data found. Check the stock symbol."
+                )
+
+            else:
+                st.success(f"Showing data for {ticker}")
+
+                latest = df["Close"].iloc[-1]
+
+                col1, col2 = st.columns(2)
+
+                col1.metric(
+                    "Latest Closing Price",
+                    f"{latest:,.2f}"
+                )
+
+                col2.metric(
+                    "Highest Price",
+                    f"{df['High'].max():,.2f}"
+                )
+
+                st.subheader("Stock Price History")
+
+                chart_df = df.reset_index()
+
+                fig = px.line(
+                    chart_df,
+                    x="Date",
+                    y="Close",
+                    title=f"{ticker} Closing Price"
+                )
+
+                st.plotly_chart(
+                    fig,
+                    use_container_width=True
+                )
+
+                st.subheader("Historical Data")
+                st.dataframe(
+                    chart_df,
+                    use_container_width=True
+                )
+
+        except Exception as e:
+            st.error(f"Unable to fetch stock data: {e}")
