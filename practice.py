@@ -1114,82 +1114,183 @@ import time
 #         st.error(f"Unable to fetch stock data: {e}")
 
 
-# ***************************************************
+# ******************************Map***************************************
 
 
 
-import streamlit as st
-import yfinance as yf
-import plotly.express as px
+# import streamlit as st
+# import folium
+# from geopy.geocoders import Nominatim
+# from streamlit_folium import st_folium
 
-st.title("📈 Stock Price Dashboard")
+# st.title("Find Location on Map")
 
-# Enter any company ticker
-ticker = st.text_input(
-    "Enter stock symbol",
-    value="RELIANCE.NS",
-    placeholder="Example: TCS.NS, AAPL, NVDA"
-).strip().upper()
+# # Store location between Streamlit reruns
+# if "location_data" not in st.session_state:
+#     st.session_state.location_data = None
 
-period = st.selectbox(
-    "Select Period",
-    ["1mo", "3mo", "6mo", "1y", "5y"],
-    index=3
-)
+# place = st.text_input(
+#     "Enter city or address",
+#     "Mumbai, Maharashtra, India"
+# )
 
-if st.button("Get Stock Data"):
+# if st.button("Find Location"):
+#     try:
+#         geolocator = Nominatim(
+#             user_agent="my_streamlit_map_app"
+#         )
 
-    if not ticker:
-        st.warning("Please enter a stock symbol.")
+#         location = geolocator.geocode(
+#             place,
+#             timeout=10
+#         )
 
-    else:
-        try:
-            with st.spinner("Fetching stock data..."):
-                df = yf.Ticker(ticker).history(period=period)
+#         if location:
+#             st.session_state.location_data = {
+#                 "address": location.address,
+#                 "latitude": location.latitude,
+#                 "longitude": location.longitude
+#             }
+#         else:
+#             st.session_state.location_data = None
+#             st.warning("Location not found.")
 
-            if df.empty:
-                st.error(
-                    "No data found. Check the stock symbol."
-                )
+#     except Exception as e:
+#         st.error(f"Error: {e}")
 
-            else:
-                st.success(f"Showing data for {ticker}")
+# # Display map OUTSIDE the button condition
+# data = st.session_state.location_data
 
-                latest = df["Close"].iloc[-1]
+# if data:
+#     st.write("Address:", data["address"])
+#     st.write("Latitude:", data["latitude"])
+#     st.write("Longitude:", data["longitude"])
 
-                col1, col2 = st.columns(2)
+#     m = folium.Map(
+#         location=[
+#             data["latitude"],
+#             data["longitude"]
+#         ],
+#         zoom_start=13
+#     )
 
-                col1.metric(
-                    "Latest Closing Price",
-                    f"{latest:,.2f}"
-                )
+#     folium.Marker(
+#         [data["latitude"], data["longitude"]],
+#         popup=data["address"],
+#         tooltip="Selected Location"
+#     ).add_to(m)
 
-                col2.metric(
-                    "Highest Price",
-                    f"{df['High'].max():,.2f}"
-                )
+#     st_folium(
+#         m,
+#         key="location_map",
+#         width=700,
+#         height=450
+#     )
 
-                st.subheader("Stock Price History")
+# ******************************Map***************************************
 
-                chart_df = df.reset_index()
+# import streamlit as st
+# from streamlit_folium import st_folium
+# from geopy.geocoders import Nominatim
+# import folium
 
-                fig = px.line(
-                    chart_df,
-                    x="Date",
-                    y="Close",
-                    title=f"{ticker} Closing Price"
-                )
+# # _________________________________________________________________________
+# # st.title("Adding a Marker")
 
-                st.plotly_chart(
-                    fig,
-                    use_container_width=True
-                )
+# # m = folium.Map(location=[48.8566,2.3533],zoom_start=12)
 
-                st.subheader("Historical Data")
-                st.dataframe(
-                    chart_df,
-                    use_container_width=True
-                )
+# # folium.Marker([48.8566,2.3522],
+# #               popup="Hello from Paris!",
+# #               tooltip="CLick me",
+# #               icon=folium.Icon(color="red",icon="heart",prefix="fa")      
+# #               ).add_to(m)
 
-        except Exception as e:
-            st.error(f"Unable to fetch stock data: {e}")
+# # st_folium(m,width=700)
+# # ______________________________________________________________________________
+
+# st.title("Search a City and Add a Marker")
+
+# city_name = st.text_input("Enter a city name: ",placeholder="e.g. Paris,Tokyo,London")
+
+# location =[48.8566,2.3522]
+# zoom = 4
+
+# if city_name:
+#     geolocator = Nominatim(user_agent="Streamlit_map_app")
+#     location_data = geolocator.geocode(city_name)
+
+#     if location_data:
+#         location=[location_data.latitude,location_data.longitude]
+#         zoom = 10
+#         st.success(f"Found:{location_data.address}")
+#     else:
+#         st.error(f"City not Found! Showing default view (Paris)")
+
+# m = folium.Map(location=location,zoom_start=zoom)
+
+# folium.Marker(location,
+#               popup=f"Hello from {city_name or 'Paris'}!",
+#               tooltip="CLick me",
+#               icon=folium.Icon(color="red",icon="heart",prefix="fa")      
+#               ).add_to(m)
+
+# st_folium(m,width=700,height=500)
+
+
+# ******************************Remove background***************************************
+
+
+# python -m pip install --upgrade googletrans==4.0.2
+
+
+
+# import streamlit as st
+# from deep_translator import GoogleTranslator
+
+# st.title("🌐 Multi-Language Translation App")
+
+# languages = {
+#     "Hindi": "hi",
+#     "Marathi": "mr",
+#     "Kannada": "kn",
+#     "Tamil": "ta",
+#     "Telugu": "te",
+#     "English": "en",
+#     "French": "fr",
+#     "German": "de",
+#     "Spanish": "es"
+# }
+
+# text = st.text_area("Enter your text:")
+
+# target_language = st.selectbox(
+#     "Select the language to translate into:",
+#     list(languages.keys())
+# )
+
+# if st.button("Translate"):
+#     if not text.strip():
+#         st.warning("Please enter some text.")
+#     else:
+#         try:
+#             translated_text = GoogleTranslator(
+#                 source="en",
+#                 target=languages[target_language]
+#             ).translate(text.strip())
+
+#             st.subheader("Translated Text")
+#             st.write(translated_text)
+
+#         except Exception as e:
+#             st.error(f"Translation failed: {e}")
+
+
+
+import psutil
+print("Logical Cores:",psutil.cpu_count())
+print("Physical Cores:",psutil.cpu_count(logical=False))
+print("CPU Usage (%):",psutil.cpu_percent(interval=1))
+
+
+
+            
